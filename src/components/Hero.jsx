@@ -9,6 +9,7 @@ import {
   FaLeaf,
   FaHome,
 } from "react-icons/fa";
+import HeroImage from "../assets/hero.png";
 
 const Hero = () => {
   const features = [
@@ -18,31 +19,31 @@ const Hero = () => {
   ];
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-black pt-20 mb-20"
-      style={{ backgroundImage: "url('https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=1200')", backgroundSize: 'cover', backgroundPosition: 'center' }}>
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent pt-20 mb-20"
+      id="home">
       
       {/* Background */}
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=2070&q=80"
+          src={HeroImage}
           className="w-full h-full object-cover scale-110"
           alt=""
         />
-        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 " />
       </div>
 
       {/* Gradient Glow */}
       <div className="absolute top-[-150px] left-[-150px] w-[500px] h-[500px] bg-yellow-500/20 blur-[140px] rounded-full"></div>
 
       {/* Open Badge */}
-      <div className="absolute flex-col top-32 right-8 right-8 z-20 bg-white/10 backdrop-blur-xl border border-white/20 rounded-full px-5 py-2 flex items-center gap-2 shadow-lg">
+      <div className="absolute flex-col top-24 sm:top-32 right-8 right-8 z-20  backdrop-blur-xl border border-white/20 rounded-full px-5 py-2 flex items-center gap-2 shadow-lg">
         <div className="flex items-center gap-2">
             <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-        <span className="text-sm text-white">
+        <span className="text-sm text-white font-bold">
           Open Now
         </span>
         </div>
-        <span className="text-xs text-gray-300">
+        <span className="text-xs text-gray-300 font-mono font-semibold">
              07:00 AM – 11:00 PM
         </span>
       </div>
@@ -68,7 +69,7 @@ const Hero = () => {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl"
+          className="bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl"
         >
           <div className="flex items-center gap-2 text-yellow-400 text-sm mb-3">
             <FaCoffee />
@@ -114,7 +115,7 @@ const Hero = () => {
             <img
               src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=900&q=80"
               alt="coffee"
-              className="rounded-[2.5rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)] w-[420px] h-[500px] object-cover"
+              className="rounded-[2.5rem] shadow-[0_40px_80px_rgba(0,0,0,0.6)] w-[450px] h-[500px] object-cover"
             />
 
             {/* Floating Card */}
