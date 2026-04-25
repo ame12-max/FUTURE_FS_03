@@ -62,34 +62,33 @@ const Hero = () => {
       </div>
 
       {/* Content */}
-      <div className="relative z-10 container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
-        
-        {/* LEFT - GLASS CARD CONTENT */}
+<div className="relative z-10 container mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        {/* LEFT - GLASS CARD CONTENT (mobile optimised) */}
         <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="bg-transparent backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-2xl"
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-5 sm:p-8 shadow-2xl"
         >
-          <div className="flex items-center gap-2 text-yellow-400 text-sm mb-3">
-            <FaCoffee />
+          <div className="flex items-center gap-2 text-yellow-400 text-xs sm:text-sm mb-2 sm:mb-3">
+            <FaCoffee className="text-sm sm:text-base" />
             <span className="tracking-widest uppercase">Welcome to</span>
           </div>
 
-          <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight">
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white leading-tight">
             Alem Cafe
           </h1>
 
-          <p className="text-gray-300 mt-5 text-lg">
+          <p className="text-gray-300 mt-3 sm:mt-5 text-sm sm:text-base md:text-lg">
             Experience rich flavors, premium coffee, and a cozy atmosphere crafted for unforgettable moments.
           </p>
 
           {/* Buttons */}
-          <div className="flex gap-4 mt-8 flex-wrap">
-            <button className="px-6 py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition">
+          <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8 flex-wrap">
+            <button className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition text-sm sm:text-base">
               Explore Menu
             </button>
-            <button className="px-6 py-3 border border-yellow-500 text-yellow-400 rounded-full hover:bg-yellow-500/10 transition">
+            <button className="px-4 sm:px-6 py-2 sm:py-3 border border-yellow-500 text-yellow-400 rounded-full hover:bg-yellow-500/10 transition text-sm sm:text-base">
               Book a Table
             </button>
           </div>
