@@ -27,7 +27,7 @@ const FullMenu = () => {
 
   return (
     <div className="min-h-screen pt-10 pb-20 ">
-      <div className="container mx-auto px-6 bg-black/7git 0 rounded-3xl p-8 mt-[-40px] shadow-2xl">
+      <div className="container mx-auto px-6 bg-black/70 rounded-3xl p-8 mt-[-40px] shadow-2xl">
         <Link to="/#menu" className="inline-flex items-center gap-2 text-gold font-bold hover:text-gold-light mb-6">
           <FiArrowLeft /> Back to Menu
         </Link>
