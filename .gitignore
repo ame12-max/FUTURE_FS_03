@@ -28,4 +28,18 @@ dist-ssr/
 *.local
 alem_cafe_backend/node_modules
 
-alem_cafe_frontend
+alem_cafe_frontend/node_modules
+alem_cafe_backend/dist
+alem_cafe_frontend/npm-cache
+alem_cafe_frontend/dist
+alem_cafe_frontend/dist-ssr
+alem_cafe_frontend/.env.local
+alem_cafe_frontend/.env.development.local
+alem_cafe_frontend/.env.test.local
+alem_cafe_frontend/.env.production.local
+alem_cafe_frontend/.env
+alem_cafe_backend/.env.local
+alem_cafe_backend/.env.development.local
+alem_cafe_backend/.env.test.local
+alem_cafe_backend/.env.production.local
+alem_cafe_backend/.env  
