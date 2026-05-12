@@ -1,56 +1,60 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import MenuSection from './components/MenuSection';
-import Stats from './components/Stats';
-import AboutLocationContact from './components/AboutLocationContact';
-import Newsletter from './components/Newsletter';
-import Footer from './components/Footer';
-import Gallery from './components/Gallery';
-import Contact from './components/Contact';
+import { Toaster } from 'react-hot-toast';
+import { AuthProvider } from './context/AuthContext';
+import { CartProvider } from './context/CartContext';
+import Navbar from './components/Layout/Navbar';
+import Footer from './components/Layout/Footer';
+import Home from './pages/Home';
+import Login from './components/Auth/Login';
+import Register from './components/Auth/Register';
+import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
+import UserDashboard from './pages/UserDashboard';
+import AdminDashboard from './pages/AdminDashboard';
 import MenuDetail from './pages/MenuDetail';
 import FullMenu from './pages/FullMenu';
+import Cart from './pages/Cart';
+import OrderTracking from './pages/OrderTracking';
+import MenuManagement from './pages/Admin/MenuManagement';
+import OrderManagement from './pages/Admin/OrderManagement';
 
-function Home() {
-  return (
-    <>
-      <Navbar />
-      <Hero />
-      <MenuSection />
-      <Stats />
-      <AboutLocationContact />
-      <Contact />
-      <Newsletter />
-      <Gallery />
-      <Footer />
-    </>
-  );
-}
+
+
 
 function App() {
   return (
-    <div className="relative overflow-x-hidden">
-      {/* Background image container */}
-      <div
-        className="fixed inset-0 -z-10"
-        style={{
-          backgroundImage: "url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')",
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
-          backgroundAttachment: 'fixed',
-        }}
-      />
-      {/* Overlay to control background image opacity (decrease darkness) */}
-      <div className="fixed inset-0 -z-10 bg-black/10" /> {/* Adjust 40 to lower value for more transparency */}
-      
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/menu/:id" element={<MenuDetail />} />
-          <Route path="/full-menu" element={<FullMenu />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <BrowserRouter>
+    <Toaster position="top-right" toastOptions={{ style: { background: '#333', color: '#fff' } }} />
+      <AuthProvider>
+        <CartProvider>
+          <div className="relative min-h-screen overflow-x-hidden">
+            <div className="fixed inset-0 -z-10">
+              <div className="absolute inset-0 bg-black/70" />
+              <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }} />
+            </div>
+            <Navbar />
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-confirmation/:id" element={<OrderConfirmation />} />
+              <Route path="/order-tracking/:id" element={<OrderTracking />} />
+              <Route path="/dashboard" element={<UserDashboard />} />
+              <Route path="/admin" element={<AdminDashboard />} />
+              <Route path="/admin/menu" element={<MenuManagement />} />
+              <Route path="/admin/orders" element={<OrderManagement />} />
+              {/* Menu routes */}
+              <Route path="/menu/:id" element={<MenuDetail />} />
+              <Route path="/full-menu" element={<FullMenu />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="*" element={<Home />} />
+            </Routes>
+            <Footer />
+          </div>
+        </CartProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
