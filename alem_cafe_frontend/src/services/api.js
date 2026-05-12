@@ -84,4 +84,11 @@ export const getImageUrl = (imagePath) => {
 
 
 
+export const favoritesAPI = {
+  getFavorites: () => api.get('/favorites'),
+  addFavorite: (menuItemId) => api.post('/favorites', { menuItemId }),
+  removeFavorite: (menuItemId) => api.delete(`/favorites/${menuItemId}`),
+};
+
+
 export default api;

@@ -10,6 +10,8 @@ const adminRoutes = require('./routes/adminRoutes');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const favoriteRoutes = require('./routes/favoriteRoutes');
+
 
 const multer = require('multer');
 const path = require('path');
@@ -45,6 +47,8 @@ app.use('/api/admin', upload.single('image'), adminRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/favorites', favoriteRoutes);
+
 
 
 const PORT = process.env.PORT || 5000;

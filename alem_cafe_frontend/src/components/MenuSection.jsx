@@ -6,28 +6,25 @@ import toast from "react-hot-toast";
 import { menuAPI, getImageUrl } from "../services/api";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
+import { useFavorites } from "../context/FavoritesContext";
 
 const MenuSection = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [likedItems, setLikedItems] = useState({});
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
-  // Load likes from localStorage on mount
-  useEffect(() => {
-    const saved = localStorage.getItem("likedMenuItems");
-    if (saved) setLikedItems(JSON.parse(saved));
-  }, []);
-
-  // Fetch menu items from API
+  // Fetch menu items from API (only available items)
   useEffect(() => {
     const fetchMenu = async () => {
       try {
         const res = await menuAPI.getAll();
-        setMenuItems(res.data);
+        // Filter to only show available items
+        const availableItems = res.data.filter(item => item.is_available === 1);
+        setMenuItems(availableItems);
         setLoading(false);
       } catch (err) {
         console.error("Failed to load menu:", err);
@@ -36,12 +33,6 @@ const MenuSection = () => {
     };
     fetchMenu();
   }, []);
-
-  const toggleLike = (id) => {
-    const updated = { ...likedItems, [id]: !likedItems[id] };
-    setLikedItems(updated);
-    localStorage.setItem("likedMenuItems", JSON.stringify(updated));
-  };
 
   const handleAddToCart = (item) => {
     const cartItem = {
@@ -64,6 +55,12 @@ const MenuSection = () => {
         position: "bottom-center",
       });
     }
+  };
+
+  const handleFavorite = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+    toggleFavorite(item);
   };
 
   // Map API data with proper image URL using getImageUrl
@@ -134,14 +131,10 @@ const MenuSection = () => {
                       {item.name}
                     </h3>
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        toggleLike(item.id);
-                      }}
+                      onClick={(e) => handleFavorite(e, item)}
                       className="text-gold hover:text-red-500 transition"
                     >
-                      {likedItems[item.id] ? (
+                      {isFavorite(item.id) ? (
                         <FiHeart
                           className="fill-red-500 text-red-500"
                           size={20}
