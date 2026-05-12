@@ -5,6 +5,7 @@ import { FiHeart, FiArrowLeft, FiPlus } from 'react-icons/fi';
 import { menuAPI, getImageUrl } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 import toast from 'react-hot-toast';
 
 const FullMenu = () => {
@@ -13,6 +14,8 @@ const FullMenu = () => {
   const [likedItems, setLikedItems] = useState({});
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { convertPrice, getSymbol } = useCurrency();
+
 
   useEffect(() => {
     const saved = localStorage.getItem('likedMenuItems');
@@ -116,7 +119,7 @@ const FullMenu = () => {
                   </div>
                   <p className="text-gray-400 text-sm mt-1">{item.description}</p>
                   <div className="flex justify-between items-center mt-4">
-                    <span className="text-gold font-bold text-xl">${parseFloat(item.price).toFixed(2)}</span>
+                    <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(item.price)}</span>
                     <button
                       onClick={(e) => {
                         e.preventDefault();

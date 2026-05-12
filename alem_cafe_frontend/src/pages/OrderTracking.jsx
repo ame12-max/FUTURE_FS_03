@@ -4,11 +4,13 @@ import { motion } from 'framer-motion';
 import { FiCheck, FiX, FiClock, FiTruck, FiPackage, FiCoffee, FiArrowLeft } from 'react-icons/fi';
 import { orderAPI } from '../services/api';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 import toast from 'react-hot-toast';
 import ConfirmModal from '../components/common/ConfirmModal';
 
 const OrderTracking = () => {
   const { id } = useParams();
+  const { convertPrice, getSymbol } = useCurrency();
   const navigate = useNavigate();
   const { user } = useAuth();
   const [order, setOrder] = useState(null);
@@ -194,14 +196,14 @@ const OrderTracking = () => {
                       <span className="text-white font-medium">{item.quantity}x</span>
                       <span className="text-gray-300 ml-2">{item.item_name}</span>
                     </div>
-                    <span className="text-gold">${(item.unit_price * item.quantity).toFixed(2)}</span>
+                    <span className="text-gold">{getSymbol()}{convertPrice(item.unit_price * item.quantity)}</span>
                   </div>
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-gold/30">
                 <div className="flex justify-between">
                   <span className="text-gray-300">Total</span>
-                  <span className="text-gold font-bold text-xl">${order.total_amount}</span>
+                  <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(order.total_amount)}</span>
                 </div>
               </div>
             </div>

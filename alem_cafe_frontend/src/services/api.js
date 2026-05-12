@@ -90,5 +90,10 @@ export const favoritesAPI = {
   removeFavorite: (menuItemId) => api.delete(`/favorites/${menuItemId}`),
 };
 
+export const userAPI = {
+  getProfile: () => api.get('/user/profile'),
+  updateProfile: (data) => api.put('/user/profile', data),
+  changePassword: (data) => api.put('/user/change-password', data),
+};
 
 export default api;

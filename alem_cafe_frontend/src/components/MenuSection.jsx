@@ -7,6 +7,8 @@ import { menuAPI, getImageUrl } from "../services/api";
 import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useFavorites } from "../context/FavoritesContext";
+import { useCurrency } from '../context/CurrencyContext';
+
 
 const MenuSection = () => {
   const ref = useRef(null);
@@ -16,6 +18,8 @@ const MenuSection = () => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { convertPrice, getSymbol } = useCurrency();
+
 
   // Fetch menu items from API (only available items)
   useEffect(() => {
@@ -146,9 +150,7 @@ const MenuSection = () => {
                   </div>
                   <p className="text-gray-400 text-sm mt-1">{item.desc}</p>
                   <div className="flex justify-between items-center mt-4">
-                    <span className="text-gold font-bold text-xl">
-                      ${item.price}
-                    </span>
+                    <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(item.originalPrice)}</span>
                     <button
                       onClick={(e) => {
                         e.preventDefault();

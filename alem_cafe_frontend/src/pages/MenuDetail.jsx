@@ -16,6 +16,8 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import Reviews from "../components/Menu/Reviews";
+import { useCurrency } from '../context/CurrencyContext';
+
 
 const MenuDetail = () => {
   const { id } = useParams();
@@ -25,6 +27,7 @@ const MenuDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
   const { user } = useAuth();
+  const { convertPrice, getSymbol } = useCurrency();
 
   useEffect(() => {
     const fetchMenuItem = async () => {
@@ -162,9 +165,8 @@ const MenuDetail = () => {
 
               {/* Price */}
               <div className="mb-4">
-                <span className="text-3xl font-bold text-gold">
-                  ${parseFloat(item.price).toFixed(2)}
-                </span>
+                <span className="text-3xl font-bold text-gold">{getSymbol()}{convertPrice(item.price)}</span>
+
               </div>
 
               {/* Dietary Tags */}

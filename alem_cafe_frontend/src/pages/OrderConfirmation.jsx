@@ -3,11 +3,13 @@ import { useParams, Link } from 'react-router-dom';
 import { orderAPI } from '../services/api';
 import { motion } from 'framer-motion';
 import { FiCheckCircle } from 'react-icons/fi';
+import { useCurrency } from '../context/CurrencyContext';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
   const [loading, setLoading] = useState(true);
+  const { convertPrice, getSymbol } = useCurrency();
 
   useEffect(() => {
     orderAPI.getById(id)
@@ -29,7 +31,7 @@ const OrderConfirmation = () => {
           <div className="text-left bg-white/5 rounded-xl p-4 mb-6">
             <p><span className="text-gold">Order #:</span> {order.id}</p>
             <p><span className="text-gold">Name:</span> {order.customer_name}</p>
-            <p><span className="text-gold">Total:</span> ${order.total_amount}</p>
+            <p><span className="text-gold">Total:</span> {getSymbol()}{convertPrice(order.total_amount)}</p>
             <p><span className="text-gold">Status:</span> <span className="capitalize">{order.status}</span></p>
           </div>
           <Link to="/" className="inline-block bg-gold text-black px-6 py-3 rounded-full font-semibold hover:bg-gold-light transition">Back to Home</Link>

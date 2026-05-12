@@ -2,9 +2,12 @@ import { useCart } from '../../context/CartContext';
 import { Link } from 'react-router-dom';
 import { FiX, FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import { getImageUrl } from '../../services/api';
+import { useCurrency } from '../../context/CurrencyContext';
+
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const { cart, updateQuantity, removeFromCart, total, itemCount, clearCart } = useCart();
+  const { convertPrice, getSymbol } = useCurrency();
 
   if (!isOpen) return null;
 
@@ -42,7 +45,8 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 />
                 <div className="flex-1">
                   <h3 className="font-semibold text-white">{item.name}</h3>
-                  <p className="text-gold font-bold">${item.price.toFixed(2)}</p>
+                  <p className="text-gold font-bold">{getSymbol()}{convertPrice(item.price)}</p>
+
                   <div className="flex items-center gap-2 mt-1">
                     <button 
                       onClick={() => updateQuantity(item.id, item.quantity - 1)} 
@@ -74,15 +78,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
           <div className="p-4 border-t border-gold/20">
             <div className="flex justify-between mb-4">
               <span className="font-semibold text-white">Subtotal:</span>
-              <span className="text-gold font-bold text-xl">${total.toFixed(2)}</span>
+              <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(total)}</span>
             </div>
             <div className="flex justify-between mb-4 text-sm text-gray-400">
               <span>Delivery Fee:</span>
-              <span>$2.00</span>
+              <span>{getSymbol()}{convertPrice(2)}</span>
             </div>
             <div className="flex justify-between mb-4 pt-2 border-t border-white/10">
               <span className="font-bold text-white">Total:</span>
-              <span className="text-gold font-bold text-xl">${(total + 2).toFixed(2)}</span>
+              <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(total + 2)}</span>
             </div>
             <div className="flex gap-3">
               <button 

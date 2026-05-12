@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
+import { CurrencyProvider, useCurrency } from '../context/CurrencyContext';
 import { orderAPI } from '../services/api';
 import { motion } from 'framer-motion';
 import { FiShoppingBag, FiUser, FiMail, FiPhone, FiMapPin, FiCoffee, FiCreditCard } from 'react-icons/fi';
@@ -9,6 +10,7 @@ import { FiShoppingBag, FiUser, FiMail, FiPhone, FiMapPin, FiCoffee, FiCreditCar
 const Checkout = () => {
   const { cart, total, clearCart } = useCart();
   const { user } = useAuth();
+  const { convertPrice, getSymbol } = useCurrency();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -75,22 +77,23 @@ const Checkout = () => {
                         <span className="text-white font-medium">{item.quantity}x</span>
                         <span className="text-gray-300 ml-2">{item.name}</span>
                       </div>
-                      <span className="text-gold font-semibold">${(item.price * item.quantity).toFixed(2)}</span>
+                      <span className="text-gold">{getSymbol()}{convertPrice(total)}</span>
+
                     </div>
                   ))}
                 </div>
                 <div className="mt-4 pt-4 border-t border-gold/30">
                   <div className="flex justify-between items-center">
                     <span className="text-gray-300">Subtotal</span>
-                    <span className="text-white">${total.toFixed(2)}</span>
+                    <span className="text-white">{getSymbol()}{convertPrice(total)}</span>
                   </div>
                   <div className="flex justify-between items-center mt-2">
                     <span className="text-gray-300">Delivery Fee</span>
-                    <span className="text-white">$2.00</span>
+                    <span className="text-white">{getSymbol()}{convertPrice(2)}</span>
                   </div>
                   <div className="flex justify-between items-center mt-3 pt-3 border-t border-white/20">
                     <span className="text-xl font-bold text-white">Total</span>
-                    <span className="text-2xl font-bold text-gold">${(total + 2).toFixed(2)}</span>
+                    <span className="text-2xl font-bold text-gold">{getSymbol()}{convertPrice(total + 2)}</span>
                   </div>
                 </div>
               </div>
@@ -207,7 +210,7 @@ const Checkout = () => {
                       Processing...
                     </>
                   ) : (
-                    `Place Order • $${(total + 2).toFixed(2)}`
+                    `Place Order • ${getSymbol()}${convertPrice(total + 2)}`
                   )}
                 </button>
               </form>

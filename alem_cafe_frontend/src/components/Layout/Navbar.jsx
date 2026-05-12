@@ -107,6 +107,13 @@ const Navbar = () => {
                     <FiHeart size={16} />
                     Favorites
                   </Link>
+                  <Link
+                    to="/account"
+                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
+                  >
+                    <FiUser size={16} />
+                    Account Settings
+                  </Link>
                   {isAdmin && (
                     <Link
                       to="/admin"

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { useCurrency } from '../context/CurrencyContext';
 import { Link } from 'react-router-dom';
 import { orderAPI } from '../services/api';
 import { motion } from 'framer-motion';
@@ -9,6 +10,8 @@ const UserDashboard = () => {
   const { user } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { convertPrice, getSymbol } = useCurrency();
+
 
   useEffect(() => {
     if (user?.email) {
@@ -64,7 +67,7 @@ const UserDashboard = () => {
                         <p className="text-sm text-gray-400">
                           {new Date(order.created_at).toLocaleDateString()} at {new Date(order.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                         </p>
-                        <p className="text-sm text-gray-300 mt-1">Total: ${order.total_amount}</p>
+                        <p className="text-sm text-gray-300 mt-1">Total: {getSymbol()}{convertPrice(order.total_amount)}</p>
                       </div>
                       <div>
                         <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
