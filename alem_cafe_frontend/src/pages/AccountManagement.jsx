@@ -3,8 +3,10 @@ import { useAuth } from '../context/AuthContext';
 import { useCurrency } from '../context/CurrencyContext';
 import { userAPI } from '../services/api';
 import { motion } from 'framer-motion';
-import { FiUser, FiMail, FiPhone, FiDollarSign, FiLock, FiSave } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiDollarSign, FiLock, FiSave, FiGlobe } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../context/LanguageContext';
+
 
 
 const AccountManagement = () => {
@@ -15,6 +17,8 @@ const AccountManagement = () => {
   const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const { language, toggleLanguage } = useLanguage();
+
 
 
 
@@ -222,6 +226,25 @@ const AccountManagement = () => {
               </form>
             </div>
           </motion.div>
+          <motion.div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+  <h2 className="text-xl font-playfair font-bold text-gold mb-4 flex items-center gap-2">
+    <FiGlobe /> Language Preference
+  </h2>
+  <div className="flex gap-2">
+    <button
+      onClick={() => language !== 'en' && toggleLanguage()}
+      className={`px-4 py-2 rounded-lg transition ${language === 'en' ? 'bg-gold text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
+    >
+      English
+    </button>
+    <button
+      onClick={() => language !== 'am' && toggleLanguage()}
+      className={`px-4 py-2 rounded-lg transition ${language === 'am' ? 'bg-gold text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
+    >
+      አማርኛ (Amharic)
+    </button>
+  </div>
+</motion.div>
         </div>
       </div>
     </div>

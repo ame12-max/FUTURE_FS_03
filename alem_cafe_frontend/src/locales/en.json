@@ -1,0 +1,163 @@
+{
+"nav": {
+  "home": "Home",
+  "menu": "Menu",
+  "about": "About",
+  "gallery": "Gallery",
+  "contact": "Contact",
+  "cart": "Cart",
+  "login": "Login",
+  "logout": "Logout",
+  "myOrders": "My Orders",
+  "favorites": "Favorites",
+  "accountSettings": "Account Settings",
+  "adminPanel": "Admin Panel",
+    "alemCafe": "Alem Cafe"
+},
+ "hero": {
+  "welcome": "Welcome to",
+  "openNow": "Open Now",
+  "tagline": "Experience rich flavors, premium coffee, and a cozy atmosphere crafted for unforgettable moments.",
+  "exploreMenu": "Explore Menu",
+  "bookTable": "Book a Table",
+  "premiumCoffee": "Premium Coffee",
+  "freshIngredients": "Fresh Ingredients",
+  "cozyAmbience": "Cozy Ambience",
+  "rating": "4.9 Rating",
+  "happyCustomers": "5K+ Happy Customers",
+    "AlemCafe": "Alem Cafe"
+},
+  "menu": {
+  "ourMenu": "OUR MENU",
+  "description": "Delicious eats made for you — from hearty meals to delightful treats, everything is crafted with love and the freshest ingredients.",
+  "viewFullMenu": "View Full Menu",
+  "addToCart": "Add to Cart",
+  "addedToCart": "added to cart!",
+  "addedToCartGuest": "added to cart! (Login to save permanently)",
+  "prepTime": "Prep",
+  "serves": "Serves",
+  "calories": "cal",
+  "ingredients": "Ingredients",
+  "allergens": "Allergens",
+  "quantity": "Quantity",
+  "minutes": "min"
+},
+"newsletter": {
+  "title": "Join our Coffee Club",
+  "description": "Get exclusive offers, free treats, and the latest updates.",
+  "placeholder": "Enter your email",
+  "subscribe": "Subscribe",
+  "subscribing": "Subscribing...",
+  "success": "Subscribed successfully! 🎉",
+  "error": "Subscription failed. Try again."
+},
+"gallery": {
+  "title": "Gallery",
+  "subtitle": "A visual journey through Alem Cafe",
+  "button": "View Full Gallery",
+  "alert": "Full gallery coming soon!"
+},
+"features": {
+  "premiumCoffee": "Premium Coffee",
+  "premiumCoffeeDesc": "Finest Beans",
+  "freshIngredients": "Fresh Ingredients",
+  "freshIngredientsDesc": "Daily & Local",
+  "cozyAmbience": "Cozy Ambience",
+  "cozyAmbienceDesc": "Feel at Home"
+},
+"contact": {
+  "title": "Get in Touch",
+  "subtitle": "We'd love to hear from you",
+  "name": "Your Name",
+  "email": "Your Email",
+  "phone": "Phone (optional)",
+  "subject": "Subject",
+  "message": "Your Message",
+  "send": "Send Message",
+  "sending": "Sending...",
+  "success": "Message sent successfully! ✨",
+  "error": "Failed to send message. Please try again."
+},
+"about": {
+  "title": "About Alem Cafe",
+  "description": "Alem Cafe is more than just a cafe. It's a place where great food, amazing coffee, and good conversations come together. Come in, relax and enjoy!",
+  "imageAlt": "cafe interior"
+},
+"location": {
+  "title": "Our Location"
+},
+"contactSection": {
+  "title": "Contact Us",
+  "whatsapp": "Chat on WhatsApp"
+},
+  "footer": {
+  "tagline": "Good coffee. Good food. Good vibes.",
+  "privacy": "Privacy Policy",
+  "terms": "Terms & Conditions",
+  "rights": "All rights reserved",
+  "alemCafe": "Alem Cafe"
+},
+"stats": {
+  "coffeeVarieties": "Coffee Varieties",
+  "foodOptions": "Food Options",
+  "happyCustomers": "Happy Customers",
+  "rating": "Rating",
+  "watchStory": "Watch Our Story"
+},
+  "common": {
+    "loading": "Loading...",
+    "back": "Back",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "confirm": "Confirm",
+  "itemNotFound": "Item not found",
+  "backToMenu": "Back to Menu",
+  "reviews": "reviews",
+  "review": "review",
+  "noReviews": "No reviews yet"
+  },
+  "dashboard": {
+  "title": "My Dashboard",
+  "welcome": "Welcome back,",
+  "orderHistory": "Order History",
+  "noOrders": "No orders yet.",
+  "browseMenu": "Browse Menu",
+  "order": "Order",
+  "total": "Total"
+},"status": {
+  "pending": "Order Placed",
+  "confirmed": "Confirmed",
+  "preparing": "Preparing",
+  "ready": "Ready for Pickup",
+  "delivered": "Delivered",
+  "cancelled": "Cancelled"
+},
+"orderTracking": {
+  "order": "Order",
+  "placedOn": "Placed on",
+  "at": "at",
+  "backToDashboard": "Back to Dashboard",
+  "orderStatus": "Order Status",
+  "current": "Current",
+  "orderItems": "Order Items",
+  "deliveryInfo": "Delivery Information",
+  "orderType": "Order Type",
+  "address": "Address",
+  "payment": "Payment",
+  "total": "Total",
+  "name": "Name",
+  "email": "Email",
+  "phone": "Phone",
+  "cancelOrder": "Cancel Order",
+  "cancelOrderTitle": "Cancel Order",
+  "cancelOrderMessage": "Are you sure you want to cancel order #{orderId}? This action cannot be undone.",
+  "yesCancel": "Yes, Cancel Order",
+  "noGoBack": "No, Go Back",
+  "orderNotFound": "Order not found",
+  "orderCancelled": "Order cancelled successfully",
+  "cancelFailed": "Failed to cancel order",
+  "statusUpdated": "Order status updated to:"
+}
+}

@@ -3,7 +3,8 @@ import { Toaster } from 'react-hot-toast';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { CurrencyProvider } from './context/CurrencyContext';
-import { FavoritesProvider } from './context/FavoritesContext'; // Add this
+import { FavoritesProvider } from './context/FavoritesContext'; 
+import { LanguageProvider } from './context/LanguageContext';
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
 import Home from './pages/Home';
@@ -31,11 +32,12 @@ function App() {
         <CartProvider>
           <CurrencyProvider>
             <FavoritesProvider> {/* Add this wrapper */}
-              <div className="relative min-h-screen overflow-x-hidden">
-                <div className="fixed inset-0 -z-10">
-                  <div className="absolute inset-0 bg-black/70" />
-                  <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }} />
-                </div>
+              <LanguageProvider>
+                <div className="relative min-h-screen overflow-x-hidden">
+                  <div className="fixed inset-0 -z-10">
+                    <div className="absolute inset-0 bg-black/70" />
+                    <div className="absolute inset-0 bg-cover bg-center bg-fixed" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80')" }} />
+                  </div>
               <Navbar />
               <Routes>
                 <Route path="/" element={<Home />} />
@@ -57,6 +59,7 @@ function App() {
               </Routes>
               <Footer />
             </div>
+              </LanguageProvider>
           </FavoritesProvider>
           </CurrencyProvider>
         </CartProvider>

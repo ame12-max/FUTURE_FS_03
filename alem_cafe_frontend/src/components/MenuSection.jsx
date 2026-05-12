@@ -8,7 +8,7 @@ import { useCart } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { useFavorites } from "../context/FavoritesContext";
 import { useCurrency } from '../context/CurrencyContext';
-
+import { useLanguage } from '../context/LanguageContext';
 
 const MenuSection = () => {
   const ref = useRef(null);
@@ -19,7 +19,7 @@ const MenuSection = () => {
   const { user } = useAuth();
   const { isFavorite, toggleFavorite } = useFavorites();
   const { convertPrice, getSymbol } = useCurrency();
-
+  const { t } = useLanguage();
 
   // Fetch menu items from API (only available items)
   useEffect(() => {
@@ -49,12 +49,12 @@ const MenuSection = () => {
     addToCart(cartItem, 1);
 
     if (user) {
-      toast.success(`${item.name} added to cart!`, {
+      toast.success(`${item.name} ${t('menu.addedToCart')}`, {
         duration: 2000,
         position: "bottom-center",
       });
     } else {
-      toast.success(`${item.name} added to cart! (Login to save permanently)`, {
+      toast.success(`${item.name} ${t('menu.addedToCartGuest')}`, {
         duration: 3000,
         position: "bottom-center",
       });
@@ -84,7 +84,7 @@ const MenuSection = () => {
     return (
       <section id="menu" ref={ref} className="py-20 bg-black/50">
         <div className="container mx-auto px-6 text-center">
-          <div className="text-gray-300">Loading menu...</div>
+          <div className="text-gray-300">{t('common.loading')}</div>
         </div>
       </section>
     );
@@ -100,18 +100,16 @@ const MenuSection = () => {
           className="text-center mb-12"
         >
           <h2 className="text-4xl md:text-5xl font-playfair font-bold text-gold">
-            OUR MENU
+            {t('menu.ourMenu')}
           </h2>
           <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
-            Delicious eats made for you — from hearty meals to delightful
-            treats, everything is crafted with love and the freshest
-            ingredients.
+            {t('menu.description')}
           </p>
           <Link
             to="/full-menu"
             className="inline-block mt-3 text-gold border-b border-gold pb-1 hover:text-gold-light transition"
           >
-            View Full Menu →
+            {t('menu.viewFullMenu')} →
           </Link>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -163,7 +161,7 @@ const MenuSection = () => {
                         });
                       }}
                       className="bg-gold text-black p-2 rounded-full hover:bg-gold-light transition"
-                      aria-label="Add to cart"
+                      aria-label={t('menu.addToCart')}
                     >
                       <FiPlus size={18} />
                     </button>

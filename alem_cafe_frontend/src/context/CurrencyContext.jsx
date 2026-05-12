@@ -4,7 +4,7 @@ import { userAPI } from '../services/api';
 
 const CurrencyContext = createContext();
 
-// ETB to USD conversion rate
+// Exchange rate: 1 USD = ? ETB (you can update this from an API later)
 const EXCHANGE_RATE = 160; // 1 USD = 160 ETB
 
 export const CurrencyProvider = ({ children }) => {
@@ -31,11 +31,14 @@ export const CurrencyProvider = ({ children }) => {
     loadCurrency();
   }, [user]);
 
-  const convertPrice = (priceUSD) => {
-    const numPrice = typeof priceUSD === 'string' ? parseFloat(priceUSD) : priceUSD;
-    if (currency === 'ETB') {
-      return (numPrice * EXCHANGE_RATE).toFixed(2);
+  // Convert price from ETB (database) to selected currency
+  const convertPrice = (priceETB) => {
+    const numPrice = typeof priceETB === 'string' ? parseFloat(priceETB) : priceETB;
+    if (currency === 'USD') {
+      // Convert ETB to USD
+      return (numPrice / EXCHANGE_RATE).toFixed(2);
     }
+    // Return ETB as is
     return numPrice.toFixed(2);
   };
 
@@ -59,7 +62,14 @@ export const CurrencyProvider = ({ children }) => {
   };
 
   return (
-    <CurrencyContext.Provider value={{ currency, convertPrice, getSymbol, toggleCurrency, loading, exchangeRate: EXCHANGE_RATE }}>
+    <CurrencyContext.Provider value={{ 
+      currency, 
+      convertPrice, 
+      getSymbol, 
+      toggleCurrency, 
+      loading, 
+      exchangeRate: EXCHANGE_RATE 
+    }}>
       {children}
     </CurrencyContext.Provider>
   );

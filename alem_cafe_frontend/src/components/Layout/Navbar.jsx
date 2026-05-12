@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMenu, FiX, FiShoppingCart, FiUser, FiHeart } from "react-icons/fi";
+import { FiMenu, FiX, FiShoppingCart, FiUser, FiHeart, FiGlobe } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
+import { useLanguage } from "../../context/LanguageContext";
 import CartDrawer from "../Cart/CartDrawer";
 
 const Navbar = () => {
@@ -12,6 +13,7 @@ const Navbar = () => {
   const [cartOpen, setCartOpen] = useState(false);
   const { user, logout, isAdmin } = useAuth();
   const { itemCount } = useCart();
+  const { t, language, toggleLanguage } = useLanguage();
   const location = useLocation();
   const navigate = useNavigate();
   const isHomePage = location.pathname === "/";
@@ -23,6 +25,13 @@ const Navbar = () => {
   }, []);
 
   const links = ["Home", "Menu", "About", "Gallery", "Contact"];
+  const translatedLinks = {
+    Home: t('nav.home'),
+    Menu: t('nav.menu'),
+    About: t('nav.about'),
+    Gallery: t('nav.gallery'),
+    Contact: t('nav.contact')
+  };
 
   const handleNavClick = (link, e) => {
     if (link === "Home") {
@@ -60,7 +69,7 @@ const Navbar = () => {
             to="/"
             className="text-2xl md:text-3xl font-playfair font-bold text-gold tracking-wide hover:scale-105 transition-transform duration-300"
           >
-            Alem Cafe
+            {t('nav.alemCafe')}
           </Link>
 
           {/* Desktop Menu */}
@@ -71,7 +80,7 @@ const Navbar = () => {
                 onClick={(e) => handleNavClick(link, e)}
                 className="text-white hover:text-gold transition font-medium relative group"
               >
-                {link}
+                {translatedLinks[link]}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
               </button>
             ))}
@@ -98,21 +107,21 @@ const Navbar = () => {
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
                   >
                     <FiUser size={16} />
-                    My Orders
+                    {t('nav.myOrders')}
                   </Link>
                   <Link
                     to="/favorites"
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
                   >
                     <FiHeart size={16} />
-                    Favorites
+                    {t('nav.favorites')}
                   </Link>
                   <Link
                     to="/account"
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
                   >
                     <FiUser size={16} />
-                    Account Settings
+                    {t('nav.accountSettings')}
                   </Link>
                   {isAdmin && (
                     <Link
@@ -120,14 +129,14 @@ const Navbar = () => {
                       className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
                     >
                       <FiUser size={16} />
-                      Admin Panel
+                      {t('nav.adminPanel')}
                     </Link>
                   )}
                   <button
                     onClick={logout}
                     className="w-full text-left px-4 py-3 text-red-400 hover:bg-white/10 transition"
                   >
-                    Logout
+                    {t('nav.logout')}
                   </button>
                 </div>
               </div>
@@ -136,7 +145,7 @@ const Navbar = () => {
                 to="/login"
                 className="text-white hover:text-gold transition px-4 py-2 rounded-full hover:bg-white/10"
               >
-                Login
+                {t('nav.login')}
               </Link>
             )}
           </div>
@@ -165,7 +174,7 @@ const Navbar = () => {
                   onClick={() => handleNavClick(link)}
                   className="text-white hover:text-gold text-lg py-2 transition"
                 >
-                  {link}
+                  {translatedLinks[link]}
                 </button>
               ))}
               <button
@@ -176,8 +185,25 @@ const Navbar = () => {
                 className="flex items-center gap-2 text-white hover:text-gold text-lg py-2 transition"
               >
                 <FiShoppingCart size={18} />
-                Cart ({itemCount > 9 ? "9+" : itemCount})
+                {t('nav.cart')} ({itemCount > 9 ? "9+" : itemCount})
               </button>
+              
+              {/* Language Switcher in Mobile Menu */}
+              <div className="flex gap-3 py-2">
+                <button
+                  onClick={() => language !== 'en' && toggleLanguage()}
+                  className={`px-3 py-1 rounded-lg text-sm transition ${language === 'en' ? 'bg-gold text-black' : 'text-white hover:text-gold'}`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => language !== 'am' && toggleLanguage()}
+                  className={`px-3 py-1 rounded-lg text-sm transition ${language === 'am' ? 'bg-gold text-black' : 'text-white hover:text-gold'}`}
+                >
+                  አማርኛ
+                </button>
+              </div>
+              
               {user ? (
                 <>
                   <Link
@@ -185,14 +211,21 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="text-white hover:text-gold text-lg py-2 transition"
                   >
-                    My Orders
+                    {t('nav.myOrders')}
                   </Link>
                   <Link
                     to="/favorites"
                     onClick={() => setIsOpen(false)}
                     className="text-white hover:text-gold text-lg py-2 transition"
                   >
-                    Favorites
+                    {t('nav.favorites')}
+                  </Link>
+                  <Link
+                    to="/account"
+                    onClick={() => setIsOpen(false)}
+                    className="text-white hover:text-gold text-lg py-2 transition"
+                  >
+                    {t('nav.accountSettings')}
                   </Link>
                   {isAdmin && (
                     <Link
@@ -200,7 +233,7 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                       className="text-white hover:text-gold text-lg py-2 transition"
                     >
-                      Admin Panel
+                      {t('nav.adminPanel')}
                     </Link>
                   )}
                   <button
@@ -210,7 +243,7 @@ const Navbar = () => {
                     }}
                     className="text-red-400 hover:text-red-300 text-lg py-2 transition"
                   >
-                    Logout
+                    {t('nav.logout')}
                   </button>
                 </>
               ) : (
@@ -219,7 +252,7 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className="text-white hover:text-gold text-lg py-2 transition"
                 >
-                  Login
+                  {t('nav.login')}
                 </Link>
               )}
             </div>

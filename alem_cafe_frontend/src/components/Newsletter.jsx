@@ -1,15 +1,16 @@
-// src/components/Newsletter.jsx
 import { motion, useInView } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { FaCoffee } from 'react-icons/fa';
 import axios from 'axios';
+import { useLanguage } from '../context/LanguageContext';
 
 const Newsletter = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
   const [email, setEmail] = useState('');
-  const [status, setStatus] = useState(null); // 'loading', 'success', 'error'
+  const [status, setStatus] = useState(null);
   const [message, setMessage] = useState('');
+  const { t } = useLanguage();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +21,7 @@ const Newsletter = () => {
       const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
       await axios.post(`${API_URL}/api/newsletter`, { email });
       setStatus('success');
-      setMessage('Subscribed successfully! 🎉');
+      setMessage(t('newsletter.success'));
       setEmail('');
       setTimeout(() => {
         setStatus(null);
@@ -28,7 +29,7 @@ const Newsletter = () => {
       }, 4000);
     } catch (err) {
       setStatus('error');
-      setMessage(err.response?.data?.error || 'Subscription failed. Try again.');
+      setMessage(err.response?.data?.error || t('newsletter.error'));
       setTimeout(() => {
         setStatus(null);
         setMessage('');
@@ -48,18 +49,16 @@ const Newsletter = () => {
           transition={{ duration: 0.6 }}
           className="flex flex-col md:flex-row items-center justify-center gap-8 max-w-3xl mx-auto bg-white/5 backdrop-blur-sm rounded-2xl p-8"
         >
-          {/* Icon on the left */}
           <div className="flex-shrink-0">
             <FaCoffee className="text-6xl text-gold" />
           </div>
-          {/* Content on the right */}
           <div className="text-center md:text-left w-full">
-            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gold">Join our Coffee Club</h2>
-            <p className="text-gray-300 mt-2 mb-4">Get exclusive offers, free treats, and the latest updates.</p>
+            <h2 className="text-3xl md:text-4xl font-playfair font-bold text-gold">{t('newsletter.title')}</h2>
+            <p className="text-gray-300 mt-2 mb-4">{t('newsletter.description')}</p>
             <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row max-w-md gap-2">
               <input
                 type="email"
-                placeholder="Enter your email"
+                placeholder={t('newsletter.placeholder')}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="flex-1 px-4 py-3 rounded-full bg-white/10 border border-gold/30 focus:outline-none text-white placeholder-gray-400"
@@ -68,9 +67,9 @@ const Newsletter = () => {
               <button
                 type="submit"
                 disabled={status === 'loading'}
-                className="bg-gold text-dark px-6 py-3 rounded-full font-semibold hover:bg-gold-light transition disabled:opacity-50"
+                className="bg-gold text-black px-6 py-3 rounded-full font-semibold hover:bg-gold-light transition disabled:opacity-50"
               >
-                {status === 'loading' ? 'Subscribing...' : 'Subscribe'}
+                {status === 'loading' ? t('newsletter.subscribing') : t('newsletter.subscribe')}
               </button>
             </form>
             {message && (

@@ -17,7 +17,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import Reviews from "../components/Menu/Reviews";
 import { useCurrency } from '../context/CurrencyContext';
-
+import { useLanguage } from '../context/LanguageContext';
 
 const MenuDetail = () => {
   const { id } = useParams();
@@ -28,6 +28,7 @@ const MenuDetail = () => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { convertPrice, getSymbol } = useCurrency();
+  const { t } = useLanguage();
 
   useEffect(() => {
     const fetchMenuItem = async () => {
@@ -58,7 +59,7 @@ const MenuDetail = () => {
       image: getImageUrl(item.image_url) || "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600",
     };
     addToCart(cartItem, quantity);
-    toast.success(`${quantity} × ${item.name} added to cart!`);
+    toast.success(`${quantity} × ${item.name} ${t('menu.addedToCart')}`);
   };
 
   // Parse dietary tags into array
@@ -74,7 +75,7 @@ const MenuDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
-        <div className="text-white animate-pulse">Loading menu item...</div>
+        <div className="text-white animate-pulse">{t('common.loading')}</div>
       </div>
     );
   }
@@ -84,13 +85,13 @@ const MenuDetail = () => {
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
         <div className="text-center">
           <p className="text-red-400 text-xl mb-4">
-            {error || "Item not found"}
+            {error || t('common.itemNotFound')}
           </p>
           <Link
             to="/#menu"
             className="inline-flex items-center gap-2 text-gold hover:text-yellow-400"
           >
-            <FiArrowLeft /> Back to Menu
+            <FiArrowLeft /> {t('common.backToMenu')}
           </Link>
         </div>
       </div>
@@ -104,7 +105,7 @@ const MenuDetail = () => {
           to="/#menu"
           className="inline-flex items-center gap-2 text-gold hover:text-yellow-400 mb-6"
         >
-          <FiArrowLeft /> Back to Menu
+          <FiArrowLeft /> {t('common.backToMenu')}
         </Link>
 
         <motion.div
@@ -148,8 +149,8 @@ const MenuDetail = () => {
                   </div>
                   <span className="text-sm text-gray-400">
                     {item.averageRating
-                      ? `${item.averageRating} / 5 (${item.reviews.length} review${item.reviews.length !== 1 ? "s" : ""})`
-                      : "No reviews yet"}
+                      ? `${item.averageRating} / 5 (${item.reviews.length} ${item.reviews.length !== 1 ? t('common.reviews') : t('common.review')})`
+                      : t('common.noReviews')}
                   </span>
                 </div>
               ) : (
@@ -159,14 +160,13 @@ const MenuDetail = () => {
                       <FiStar key={i} className="text-sm text-gray-500" />
                     ))}
                   </div>
-                  <span className="text-sm text-gray-400">No reviews yet</span>
+                  <span className="text-sm text-gray-400">{t('common.noReviews')}</span>
                 </div>
               )}
 
               {/* Price */}
               <div className="mb-4">
                 <span className="text-3xl font-bold text-gold">{getSymbol()}{convertPrice(item.price)}</span>
-
               </div>
 
               {/* Dietary Tags */}
@@ -192,16 +192,16 @@ const MenuDetail = () => {
               <div className="flex items-center gap-4 mb-6 text-gray-400">
                 <div className="flex items-center gap-2">
                   <FiClock />
-                  <span>Prep: {item.preparation_time || 15} min</span>
+                  <span>{t('menu.prepTime')}: {item.preparation_time || 15} {t('menu.minutes')}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <FiUsers />
-                  <span>Serves: 1</span>
+                  <span>{t('menu.serves')}: 1</span>
                 </div>
                 {item.calories && (
                   <div className="flex items-center gap-2">
                     <FiInfo />
-                    <span>{item.calories} cal</span>
+                    <span>{item.calories} {t('menu.calories')}</span>
                   </div>
                 )}
               </div>
@@ -210,7 +210,7 @@ const MenuDetail = () => {
               {ingredients.length > 0 && (
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-gold mb-2">
-                    Ingredients
+                    {t('menu.ingredients')}
                   </h3>
                   <ul className="list-disc list-inside text-gray-300 space-y-1">
                     {ingredients.map((ing) => (
@@ -224,7 +224,7 @@ const MenuDetail = () => {
               {item.allergens && (
                 <div className="mb-6 p-3 bg-yellow-500/10 rounded-lg">
                   <p className="text-sm text-yellow-400">
-                    <strong>Allergens:</strong> {item.allergens}
+                    <strong>{t('menu.allergens')}:</strong> {item.allergens}
                   </p>
                 </div>
               )}
@@ -232,7 +232,7 @@ const MenuDetail = () => {
               {/* Quantity and Add to Cart */}
               <div className="border-t border-white/20 pt-6 mb-6">
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-gray-300">Quantity:</span>
+                  <span className="text-gray-300">{t('menu.quantity')}:</span>
                   <div className="flex items-center gap-3">
                     <button
                       onClick={decreaseQuantity}
@@ -258,7 +258,7 @@ const MenuDetail = () => {
                     className="flex-1 bg-gold text-black px-6 py-3 rounded-full font-semibold hover:scale-105 transition flex items-center justify-center gap-2"
                   >
                     <FiShoppingCart size={18} />
-                    Add to Cart
+                    {t('menu.addToCart')}
                   </button>
                 </div>
               </div>

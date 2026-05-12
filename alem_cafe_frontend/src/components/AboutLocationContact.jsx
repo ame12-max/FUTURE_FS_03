@@ -1,11 +1,13 @@
-// src/components/AboutLocationContact.jsx
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FaPhone, FaEnvelope, FaClock, FaWhatsapp, FaMapMarkerAlt } from 'react-icons/fa';
+import { useLanguage } from '../context/LanguageContext';
 
 const AboutLocationContact = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+  const { t } = useLanguage();
+
   return (
     <section id="about" ref={ref} className="py-20">
       <div className="container mx-auto px-6">
@@ -17,13 +19,13 @@ const AboutLocationContact = () => {
             transition={{ duration: 0.6 }}
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-6"
           >
-            <h3 className="text-2xl font-playfair font-bold text-gold mb-3">About Alem Cafe</h3>
+            <h3 className="text-2xl font-playfair font-bold text-gold mb-3">{t('about.title')}</h3>
             <p className="text-gray-300">
-              Alem Cafe is more than just a cafe. It’s a place where great food, amazing coffee, and good conversations come together. Come in, relax and enjoy!
+              {t('about.description')}
             </p>
             <img
               src='https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600'
-              alt="cafe interior"
+              alt={t('about.imageAlt')}
               className="mt-4 rounded-xl w-full h-32 object-cover"
             />
           </motion.div>
@@ -36,7 +38,7 @@ const AboutLocationContact = () => {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-6"
           >
             <h3 className="text-2xl font-playfair font-bold text-gold mb-3 flex items-center gap-2">
-              <FaMapMarkerAlt className="text-gold" /> Our Location
+              <FaMapMarkerAlt className="text-gold" /> {t('location.title')}
             </h3>
             <div className="h-48 rounded-xl overflow-hidden mb-3">
               <iframe
@@ -59,7 +61,7 @@ const AboutLocationContact = () => {
             transition={{ delay: 0.2 }}
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-6"
           >
-            <h3 className="text-2xl font-playfair font-bold text-gold mb-3">Contact Us</h3>
+            <h3 className="text-2xl font-playfair font-bold text-gold mb-3">{t('contactSection.title')}</h3>
             <div className="space-y-3">
               <p className="flex items-center gap-2"><FaPhone className="text-gold" /> +251 912 345 678</p>
               <p className="flex items-center gap-2"><FaEnvelope className="text-gold" /> hello@alemcafe.com</p>
@@ -70,7 +72,7 @@ const AboutLocationContact = () => {
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition mt-2"
               >
-                <FaWhatsapp /> Chat on WhatsApp
+                <FaWhatsapp /> {t('contactSection.whatsapp')}
               </a>
             </div>
           </motion.div>

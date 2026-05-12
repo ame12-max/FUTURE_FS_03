@@ -1,16 +1,19 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FaCoffee, FaLeaf, FaHome } from 'react-icons/fa';
-
-const features = [
-  { icon: FaCoffee, title: 'Premium Coffee', desc: 'Finest Beans' },
-  { icon: FaLeaf, title: 'Fresh Ingredients', desc: 'Daily & Local' },
-  { icon: FaHome, title: 'Cozy Ambiente', desc: 'Feel at Home' },
-];
+import { useLanguage } from '../context/LanguageContext';
 
 const Features = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
+  const { t } = useLanguage();
+
+  const features = [
+    { icon: FaCoffee, title: t('features.premiumCoffee'), desc: t('features.premiumCoffeeDesc') },
+    { icon: FaLeaf, title: t('features.freshIngredients'), desc: t('features.freshIngredientsDesc') },
+    { icon: FaHome, title: t('features.cozyAmbience'), desc: t('features.cozyAmbienceDesc') },
+  ];
+
   return (
     <section ref={ref} className="py-16 bg-black/50">
       <div className="container mx-auto px-6">

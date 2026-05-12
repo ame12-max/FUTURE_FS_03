@@ -1,16 +1,20 @@
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
 import { FaVideo } from 'react-icons/fa';
+import { useLanguage } from '../context/LanguageContext';
 
 const Stats = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
+  const { t } = useLanguage();
+
   const stats = [
-    { label: 'Coffee Varieties', value: '15+' },
-    { label: 'Food Options', value: '30+' },
-    { label: 'Happy Customers', value: '5K+' },
-    { label: 'Rating', value: '4.9' },
+    { label: t('stats.coffeeVarieties'), value: '15+' },
+    { label: t('stats.foodOptions'), value: '30+' },
+    { label: t('stats.happyCustomers'), value: '5K+' },
+    { label: t('stats.rating'), value: '4.9' },
   ];
+
   return (
     <section
       ref={ref}
@@ -33,8 +37,8 @@ const Stats = () => {
             ))}
           </div>
           <div className="flex justify-center mt-12">
-            <button className="flex items-center gap-2 bg-gold text-dark px-8 py-3 rounded-full font-semibold hover:bg-gold-light transition">
-              <FaVideo /> Watch Our Story
+            <button className="flex items-center gap-2 bg-gold text-black px-8 py-3 rounded-full font-semibold hover:bg-gold-light transition">
+              <FaVideo /> {t('stats.watchStory')}
             </button>
           </div>
         </motion.div>

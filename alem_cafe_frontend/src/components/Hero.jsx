@@ -1,4 +1,3 @@
-// src/components/Hero.jsx
 import { motion } from "framer-motion";
 import {
   FaFacebook,
@@ -10,56 +9,49 @@ import {
   FaHome,
 } from "react-icons/fa";
 import HeroImage from "../assets/hero.png";
+import { useLanguage } from "../context/LanguageContext";
 
 const Hero = () => {
+  const { t } = useLanguage();
+
   const features = [
-    { icon: FaCoffee, title: "Premium Coffee" },
-    { icon: FaLeaf, title: "Fresh Ingredients" },
-    { icon: FaHome, title: "Cozy Ambience" },
+    { icon: FaCoffee, title: t('hero.premiumCoffee') },
+    { icon: FaLeaf, title: t('hero.freshIngredients') },
+    { icon: FaHome, title: t('hero.cozyAmbience') },
   ];
 
-const handleBookTable = () => {  // Scroll to reservation section or open booking modal
-  const reservationSection = document.getElementById("reservation");
-  if (reservationSection) {
-    reservationSection.scrollIntoView({ behavior: "smooth" });
-  }
-}
+  const handleBookTable = () => {
+    const reservationSection = document.getElementById("contact");
+    if (reservationSection) {
+      reservationSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
-const handleExploreMenu = () => {  // Scroll to menu section
-  const menuSection = document.getElementById("menu");
-  if (menuSection) {
-    menuSection.scrollIntoView({ behavior: "smooth" });
-  }
-}
+  const handleExploreMenu = () => {
+    const menuSection = document.getElementById("menu");
+    if (menuSection) {
+      menuSection.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent pt-20 mb-20"
-      id="home">
-      
+    <section className="relative min-h-screen flex items-center overflow-hidden bg-transparent pt-20 mb-20" id="home">
       {/* Background */}
       <div className="absolute inset-0">
-        <img
-          src={HeroImage}
-          className="w-full h-full object-cover scale-110"
-          alt=""
-        />
-        <div className="absolute inset-0 " />
+        <img src={HeroImage} className="w-full h-full object-cover scale-110" alt="" />
+        <div className="absolute inset-0" />
       </div>
 
       {/* Gradient Glow */}
       <div className="absolute top-[-150px] left-[-150px] w-[500px] h-[500px] bg-yellow-500/20 blur-[140px] rounded-full"></div>
 
       {/* Open Badge */}
-      <div className="absolute flex-col top-24 sm:top-32 right-8 right-8 z-20  backdrop-blur-xl border border-white/20 rounded-full px-2 py-1 sm:px-5 sm:py-2 flex items-center gap-2 shadow-lg">
+      <div className="absolute flex-col top-24 sm:top-32 right-8 z-20 backdrop-blur-xl border border-white/20 rounded-full px-2 py-1 sm:px-5 sm:py-2 flex items-center gap-2 shadow-lg">
         <div className="flex items-center gap-2">
-            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-        <span className="text-sm text-white font-bold">
-          Open Now
-        </span>
+          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <span className="text-sm text-white font-bold">{t('hero.openNow')}</span>
         </div>
-        <span className="text-xs text-gray-300 font-mono font-semibold">
-             07:00 AM – 11:00 PM
-        </span>
+        <span className="text-xs text-gray-300 font-mono font-semibold">07:00 AM – 11:00 PM</span>
       </div>
 
       {/* Social Sidebar */}
@@ -76,49 +68,55 @@ const handleExploreMenu = () => {  // Scroll to menu section
       </div>
 
       {/* Content */}
-<div className="relative z-10 container mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
-        {/* LEFT - GLASS CARD CONTENT (mobile optimised) */}
-    <motion.div
-  initial={{ opacity: 0, y: 40 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8 }}
-  className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-5 sm:p-8 shadow-2xl flex flex-col items-start gap-4 sm:gap-6 w-full overflow-hidden"
->
-  <div className="flex items-center gap-2 text-yellow-400 text-xs sm:text-sm mb-2 sm:mb-3">
-    <FaCoffee className="text-sm sm:text-base" />
-    <span className="tracking-widest uppercase whitespace-nowrap">Welcome to</span>
-  </div>
+      <div className="relative z-10 container mx-auto px-4 sm:px-6 grid md:grid-cols-2 gap-8 md:gap-12 items-center">
+        {/* LEFT - GLASS CARD CONTENT */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-5 sm:p-8 shadow-2xl flex flex-col items-start gap-4 sm:gap-6 w-full overflow-hidden"
+        >
+          <div className="flex items-center gap-2 text-yellow-400 text-xs sm:text-sm mb-2 sm:mb-3">
+            <FaCoffee className="text-sm sm:text-base" />
+            <span className="tracking-widest uppercase whitespace-nowrap">{t('hero.welcome')}</span>
+          </div>
 
-  <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white leading-tight break-words">
-    Alem Cafe
-  </h1>
+          <h1 className="text-3xl sm:text-5xl md:text-6xl font-bold text-white leading-tight break-words">
+            {t('hero.AlemCafe')}
+          </h1>
 
-  <p className="text-gray-300 mt-3 sm:mt-5 text-sm sm:text-base md:text-lg break-words">
-    Experience rich flavors, premium coffee, and a cozy atmosphere crafted for unforgettable moments.
-  </p>
+          <p className="text-gray-300 mt-3 sm:mt-5 text-sm sm:text-base md:text-lg break-words">
+            {t('hero.tagline')}
+          </p>
 
-  {/* Buttons */}
-  <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8 flex-wrap w-full">
-    <button onClick={handleExploreMenu} className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition text-sm sm:text-base whitespace-nowrap">
-      Explore Menu
-    </button>
-    <button onClick={handleBookTable} className="px-4 sm:px-6 py-2 sm:py-3 border border-yellow-500 text-yellow-400 rounded-full hover:bg-yellow-500/10 transition text-sm sm:text-base whitespace-nowrap">
-      Book a Table
-    </button>
-  </div>
+          {/* Buttons */}
+          <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8 flex-wrap w-full">
+            <button
+              onClick={handleExploreMenu}
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition text-sm sm:text-base whitespace-nowrap"
+            >
+              {t('hero.exploreMenu')}
+            </button>
+            <button
+              onClick={handleBookTable}
+              className="px-4 sm:px-6 py-2 sm:py-3 border border-yellow-500 text-yellow-400 rounded-full hover:bg-yellow-500/10 transition text-sm sm:text-base whitespace-nowrap"
+            >
+              {t('hero.bookTable')}
+            </button>
+          </div>
 
-  {/* Features - now wraps on tiny screens */}
-  <div className="flex flex-wrap gap-4 sm:gap-6 mt-8 w-full justify-start">
-    {features.map((f, i) => (
-      <div key={i} className="flex items-center gap-2 text-sm text-gray-300 whitespace-nowrap">
-        <f.icon className="text-yellow-400" />
-        <span className="font-semibold text-black">{f.title}</span>
-      </div>
-    ))}
-  </div>
-</motion.div>
+          {/* Features */}
+          <div className="flex flex-wrap gap-4 sm:gap-6 mt-8 w-full justify-start">
+            {features.map((f, i) => (
+              <div key={i} className="flex items-center gap-2 text-sm text-gray-300 whitespace-nowrap">
+                <f.icon className="text-yellow-400" />
+                <span className="font-semibold text-white">{f.title}</span>
+              </div>
+            ))}
+          </div>
+        </motion.div>
 
-        {/* RIGHT - FLOATING IMAGE (NOT BOXED FEEL) */}
+        {/* RIGHT - FLOATING IMAGE */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9, x: 40 }}
           animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -134,12 +132,12 @@ const handleExploreMenu = () => {  // Scroll to menu section
 
             {/* Floating Card */}
             <div className="absolute -bottom-2 left-6 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl px-5 py-4 shadow-2xl">
-  <div className="flex items-center gap-2 mb-1">
-    <span className="text-yellow-400 text-lg">★</span>
-    <span className="text-white font-semibold text-sm">4.9 Rating</span>
-  </div>
-  <p className="text-gray-300 text-xs">5K+ Happy Customers</p>
-</div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-yellow-400 text-lg">★</span>
+                <span className="text-white font-semibold text-sm">{t('hero.rating')}</span>
+              </div>
+              <p className="text-gray-300 text-xs">{t('hero.happyCustomers')}</p>
+            </div>
           </div>
         </motion.div>
       </div>

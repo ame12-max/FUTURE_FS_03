@@ -1,6 +1,6 @@
-// src/components/Gallery.jsx
 import { motion, useInView } from 'framer-motion';
 import { useRef } from 'react';
+import { useLanguage } from '../context/LanguageContext';
 
 const allImages = [
   'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=600',
@@ -14,7 +14,8 @@ const allImages = [
 const Gallery = () => {
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
-  const displayedImages = allImages.slice(0, 3); // Only first 3 images
+  const { t } = useLanguage();
+  const displayedImages = allImages.slice(0, 3);
 
   return (
     <section id="gallery" ref={ref} className="py-20 bg-black/30">
@@ -25,8 +26,8 @@ const Gallery = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-gold">Gallery</h2>
-          <p className="text-gray-300 mt-2">A visual journey through Alem Cafe</p>
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-gold">{t('gallery.title')}</h2>
+          <p className="text-gray-300 mt-2">{t('gallery.subtitle')}</p>
         </motion.div>
         <div className="grid md:grid-cols-3 gap-6">
           {displayedImages.map((img, idx) => (
@@ -43,10 +44,10 @@ const Gallery = () => {
         </div>
         <div className="text-center mt-10">
           <button
-            onClick={() => alert('Full gallery coming soon!')}
+            onClick={() => alert(t('gallery.alert'))}
             className="px-6 py-3 border border-gold text-gold rounded-full hover:bg-gold/20 transition font-semibold"
           >
-            View Full Gallery →
+            {t('gallery.button')} →
           </button>
         </div>
       </div>

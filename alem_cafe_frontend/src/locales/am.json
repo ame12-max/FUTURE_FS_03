@@ -1,0 +1,164 @@
+{
+  "nav": {
+    "home": "መነሻ",
+    "menu": "ሜኑ",
+    "about": "ስለእኛ",
+    "gallery": "ምስሎች",
+    "contact": "አግኙን",
+    "cart": "ኪስ",
+    "login": "ግባ",
+    "logout": "ውጣ",
+    "myOrders": "ትዕዛዞቼ",
+    "favorites": "የምወዳቸው",
+    "accountSettings": "መለያ ቅንብሮች",
+    "adminPanel": "አስተዳዳሪ ፓነል",
+    "alemCafe": "አለም ካፌ"
+  },
+  "hero": {
+    "welcome": "እንኳን ደህና መጡ ወደ",
+    "openNow": "ክፍት ነን",
+    "tagline": "ያልተረሳ ጊዜ ለማሳለፍ የተዘጋጀ ጥሩ ጣዕም፣ ፕሪሚየም ቡና እና ምቹ ሁኔታ ይሞክሩ።",
+    "exploreMenu": "ሜኑ ይመልከቱ",
+    "bookTable": "ጠረጴዛ ይያዙ",
+    "premiumCoffee": "ፕሪሚየም ቡና",
+    "freshIngredients": "ትኩስ ንጥረ ነገሮች",
+    "cozyAmbience": "ምቹ ሁኔታ",
+    "rating": "4.9 ደረጃ",
+    "happyCustomers": "5K+ ደስ ያላቸው ደንበኞች",
+    "AlemCafe": "አለም ካፌ"
+  },
+  "menu": {
+    "ourMenu": "የኛ ሜኑዎች",
+    "description": "ለእርስዎ የተዘጋጀ ጣፋጭ ምግቦች - ከልብ ምግቦች እስከ ጣፋጭ ምግቦች ድረስ ሁሉም ነገር በፍቅር እና በትኩስ ንጥረ ነገሮች የተሰራ ነው።",
+    "viewFullMenu": "ሙሉ ሜኑ ይመልከቱ",
+    "addToCart": "ወደ ጋሪ ጨምር",
+    "addedToCart": "ወደ ጋሪ ተጨምሯል!",
+    "addedToCartGuest": "ወደ ጋሪ ተጨምሯል! (በቋሚነት ለማስቀመጥ ይግቡ)",
+    "prepTime": "ዝግጅት",
+    "serves": "የሚበቃው",
+    "calories": "ካሎሪ",
+    "ingredients": "ንጥረ ነገሮች",
+    "allergens": "አለርጂዎች",
+    "quantity": "ብዛት",
+    "minutes": "ደቂቃ"
+  },
+  "newsletter": {
+    "title": "ከኛ ጋር ይቀላቀሉ",
+    "description": "ልዩ ቅናሾችን፣ ነጻ ምግቦችን እና የቅርብ ጊዜ መረጃዎችን ያግኙ።",
+    "placeholder": "ኢሜልዎን ያስገቡ",
+    "subscribe": "ይመዝገቡ",
+    "subscribing": "በመመዝገብ ላይ...",
+    "success": "በተሳካ ሁኔታ ተመዝግበዋል! 🎉",
+    "error": "ምዝገባ አልተሳካም። እንደገና ይሞክሩ።"
+  },
+  "gallery": {
+    "title": "ምስሎች",
+    "subtitle": "በአሌም ካፌ በኩል የሚደረግ የእይታ ጉዞ",
+    "button": "ሙሉ ምስሎችን ይመልከቱ",
+    "alert": "ሙሉ ምስሎች በቅርቡ ይመጣሉ!"
+  },
+  "features": {
+    "premiumCoffee": "ፕሪሚየም ቡና",
+    "premiumCoffeeDesc": "ምርጥ ቡና",
+    "freshIngredients": "ትኩስ ንጥረ ነገሮች",
+    "freshIngredientsDesc": "በየቀኑ እና በአካባቢው",
+    "cozyAmbience": "ምቹ ሁኔታ",
+    "cozyAmbienceDesc": "እንደ ቤትዎ ይሰማዎ"
+  },
+  "contact": {
+    "title": "ያግኙን",
+    "subtitle": "ከእርስዎ መስማት እንወዳለን",
+    "name": "ስምዎ",
+    "email": "ኢሜልዎ",
+    "phone": "ስልክ (አማራጭ)",
+    "subject": "ርዕስ",
+    "message": "መልዕክትዎ",
+    "send": "መልዕክት ላኩ",
+    "sending": "በመላክ ላይ...",
+    "success": "መልዕክትዎ በተሳካ ሁኔታ ተልኳል! ✨",
+    "error": "መልዕክት መላክ አልተሳካም። እንደገና ይሞክሩ።"
+  },
+  "about": {
+    "title": "ስለ አሌም ካፌ",
+    "description": "አሌም ካፌ ከካፌ በላይ ነው። ጥሩ ምግብ፣ አስደናቂ ቡና እና ጥሩ ውይይቶች የሚገናኙበት ቦታ ነው። ገብተው ዘና ይበሉ እና ይደሰቱ!",
+    "imageAlt": "የካፌው ውስጣዊ እይታ"
+  },
+  "location": {
+    "title": "አድራሻችን"
+  },
+  "contactSection": {
+    "title": "አግኙን",
+    "whatsapp": "በዋትሳፕ ያናግሩን"
+  },
+ "footer": {
+  "tagline": "ጥሩ ቡና። ጥሩ ምግብ። ጥሩ ስሜት።",
+  "privacy": "የግላዊነት ፖሊሲ",
+  "terms": "ውሎች እና ቅድመ ሁኔታዎች",
+  "rights": "መብቶች ተጠብቀዋል",
+  "alemCafe": "አሌም ካፌ"
+},
+"stats": {
+  "coffeeVarieties": "የቡና ዓይነቶች",
+  "foodOptions": "የምግብ አማራጮች",
+  "happyCustomers": "ደስ ያላቸው ደንበኞች",
+  "rating": "ደረጃ",
+  "watchStory": "ታሪካችንን ይመልከቱ"
+},
+  "common": {
+    "loading": "በመጫን ላይ ነው...",
+    "back": "ተመለስ",
+    "save": "አስቀምጥ",
+    "cancel": "ሰርዝ",
+    "delete": "ሰርዝ",
+    "edit": "አርትዕ",
+    "confirm": "አረጋግጥ",
+    "itemNotFound": "ሜኑ አልተገኘም",
+    "backToMenu": "ወደ ሜኑ ተመለስ",
+    "reviews": "ግምገማዎች",
+    "review": "ግምገማ",
+    "noReviews": "እስካሁን ግምገማ የለም"
+  },
+  "dashboard": {
+  "title": "የእኔ ዳሽቦርድ",
+  "welcome": "እንኳን ደህና መጡ፣",
+  "orderHistory": "የትዕዛዝ ታሪክ",
+  "noOrders": "እስካሁን ትዕዛዝ የለም።",
+  "browseMenu": "ምናሌ ይመልከቱ",
+  "order": "ትዕዛዝ",
+  "total": "ጠቅላላ"
+},
+"status": {
+  "pending": "ትዕዛዝ ተቀምጧል",
+  "confirmed": "ተረጋግጧል",
+  "preparing": "በዝግጅት ላይ",
+  "ready": "ለማንሳት ዝግጁ",
+  "delivered": "ደርሷል",
+  "cancelled": "ተሰርዟል"
+},
+"orderTracking": {
+  "order": "ትዕዛዝ",
+  "placedOn": "ተቀምጧል",
+  "at": "ሰዓት",
+  "backToDashboard": "ወደ ዳሽቦርድ ተመለስ",
+  "orderStatus": "የትዕዛዝ ሁኔታ",
+  "current": "አሁን",
+  "orderItems": "የትዕዛዝ ዕቃዎች",
+  "deliveryInfo": "የማድረሻ መረጃ",
+  "orderType": "የትዕዛዝ አይነት",
+  "address": "አድራሻ",
+  "payment": "ክፍያ",
+  "total": "ጠቅላላ",
+  "name": "ስም",
+  "email": "ኢሜል",
+  "phone": "ስልክ",
+  "cancelOrder": "ትዕዛዝ ሰርዝ",
+  "cancelOrderTitle": "ትዕዛዝ ሰርዝ",
+  "cancelOrderMessage": "ትዕዛዝ #{orderId} መሰረዝ እንደሚፈልጉ እርግጠኛ ነዎት? ይህ እርምጃ ሊቀለበስ አይችልም።",
+  "yesCancel": "አዎ፣ ትዕዛዙን ሰርዝ",
+  "noGoBack": "አይ፣ ተመለስ",
+  "orderNotFound": "ትዕዛዝ አልተገኘም",
+  "orderCancelled": "ትዕዛዝ በተሳካ ሁኔታ ተሰርዟል",
+  "cancelFailed": "ትዕዛዝ መሰረዝ አልተሳካም",
+  "statusUpdated": "የትዕዛዝ ሁኔታ ተለውጧል፦"
+}
+}
