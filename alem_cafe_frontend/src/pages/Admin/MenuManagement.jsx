@@ -13,9 +13,11 @@ import {
 } from "react-icons/fi";
 import toast from "react-hot-toast";
 import ConfirmModal from "../../components/common/ConfirmModal";
+import { useLanguage } from "../../context/LanguageContext";
 
 const MenuManagement = () => {
   const { user, isAdmin } = useAuth();
+  const { t } = useLanguage();
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
@@ -52,7 +54,7 @@ const MenuManagement = () => {
       setLoading(false);
     } catch (err) {
       console.error("Failed to fetch menu:", err);
-      toast.error("Failed to load menu items");
+      toast.error(t('menuManagement.fetchError'));
       setLoading(false);
     }
   };
@@ -86,16 +88,16 @@ const MenuManagement = () => {
 
       if (editingItem) {
         await adminAPI.updateMenuItem(editingItem.id, formDataToSend);
-        toast.success("Menu item updated");
+        toast.success(t('menuManagement.updateSuccess'));
       } else {
         await adminAPI.addMenuItem(formDataToSend);
-        toast.success("Menu item added");
+        toast.success(t('menuManagement.addSuccess'));
       }
       resetForm();
       fetchMenuItems();
     } catch (err) {
       console.error("Save error:", err);
-      toast.error(err.response?.data?.error || "Failed to save menu item");
+      toast.error(err.response?.data?.error || t('menuManagement.saveError'));
     }
   };
 
@@ -103,10 +105,10 @@ const MenuManagement = () => {
     if (!itemToDelete) return;
     try {
       await adminAPI.deleteMenuItem(itemToDelete.id);
-      toast.success("Item deleted");
+      toast.success(t('menuManagement.deleteSuccess'));
       fetchMenuItems();
     } catch (err) {
-      toast.error("Failed to delete");
+      toast.error(t('menuManagement.deleteError'));
     } finally {
       setDeleteModalOpen(false);
       setItemToDelete(null);
@@ -121,10 +123,10 @@ const MenuManagement = () => {
   const toggleAvailability = async (id, currentStatus) => {
     try {
       await adminAPI.updateMenuItem(id, { is_available: currentStatus ? 0 : 1 });
-      toast.success(currentStatus ? "Item hidden from menu" : "Item visible on menu");
+      toast.success(currentStatus ? t('menuManagement.hideSuccess') : t('menuManagement.showSuccess'));
       fetchMenuItems();
     } catch (err) {
-      toast.error("Failed to update status");
+      toast.error(t('menuManagement.statusError'));
     }
   };
 
@@ -180,7 +182,7 @@ const MenuManagement = () => {
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
-        <div className="text-white animate-pulse">Loading menu items...</div>
+        <div className="text-white animate-pulse">{t('common.loading')}</div>
       </div>
     );
   }
@@ -191,7 +193,7 @@ const MenuManagement = () => {
         {/* Header */}
         <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
           <h1 className="text-3xl font-playfair font-bold text-gold">
-            Menu Management
+            {t('menuManagement.title')}
           </h1>
           <div className="flex gap-3">
             <div className="flex bg-white/10 rounded-full p-1">
@@ -203,7 +205,7 @@ const MenuManagement = () => {
                     : "text-gray-300 hover:text-white"
                 }`}
               >
-                Available Only
+                {t('menuManagement.availableOnly')}
               </button>
               <button
                 onClick={() => setShowUnavailable(true)}
@@ -213,14 +215,14 @@ const MenuManagement = () => {
                     : "text-gray-300 hover:text-white"
                 }`}
               >
-                Show All
+                {t('menuManagement.showAll')}
               </button>
             </div>
             <button
               onClick={() => setShowModal(true)}
               className="bg-gold text-black px-4 py-2 rounded-full font-semibold flex items-center gap-2 hover:bg-gold-light transition"
             >
-              <FiPlus /> Add New Item
+              <FiPlus /> {t('menuManagement.addNew')}
             </button>
           </div>
         </div>
@@ -229,25 +231,25 @@ const MenuManagement = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <div className="bg-white/5 rounded-xl p-4 text-center">
             <p className="text-2xl font-bold text-gold">{menuItems.length}</p>
-            <p className="text-gray-400 text-sm">Total Items</p>
+            <p className="text-gray-400 text-sm">{t('menuManagement.totalItems')}</p>
           </div>
           <div className="bg-white/5 rounded-xl p-4 text-center">
             <p className="text-2xl font-bold text-green-400">
               {menuItems.filter(i => i.is_available === 1).length}
             </p>
-            <p className="text-gray-400 text-sm">Available</p>
+            <p className="text-gray-400 text-sm">{t('menuManagement.available')}</p>
           </div>
           <div className="bg-white/5 rounded-xl p-4 text-center">
             <p className="text-2xl font-bold text-red-400">
               {menuItems.filter(i => i.is_available === 0).length}
             </p>
-            <p className="text-gray-400 text-sm">Unavailable</p>
+            <p className="text-gray-400 text-sm">{t('menuManagement.unavailable')}</p>
           </div>
           <div className="bg-white/5 rounded-xl p-4 text-center">
             <p className="text-2xl font-bold text-blue-400">
               {menuItems.filter(i => i.category).length}
             </p>
-            <p className="text-gray-400 text-sm">Categories</p>
+            <p className="text-gray-400 text-sm">{t('menuManagement.categories')}</p>
           </div>
         </div>
 
@@ -288,21 +290,21 @@ const MenuManagement = () => {
                           ? "bg-green-500/20 text-green-400 hover:bg-green-500/30"
                           : "bg-red-500/20 text-red-400 hover:bg-red-500/30"
                       }`}
-                      title={item.is_available ? "Click to hide from menu" : "Click to show on menu"}
+                      title={item.is_available ? t('menuManagement.hideTooltip') : t('menuManagement.showTooltip')}
                     >
                       {item.is_available ? <FiCheck size={16} /> : <FiX size={16} />}
                     </button>
                     <button
                       onClick={() => editItem(item)}
                       className="p-2 rounded-full bg-blue-500/20 text-blue-400 hover:bg-blue-500/30 transition"
-                      title="Edit item"
+                      title={t('menuManagement.editTooltip')}
                     >
                       <FiEdit2 size={16} />
                     </button>
                     <button
                       onClick={() => openDeleteModal(item)}
                       className="p-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"
-                      title="Delete item"
+                      title={t('menuManagement.deleteTooltip')}
                     >
                       <FiTrash2 size={16} />
                     </button>
@@ -326,7 +328,7 @@ const MenuManagement = () => {
                 </div>
                 {!item.is_available && (
                   <div className="mt-2 text-xs text-red-400 flex items-center gap-1">
-                    <FiX size={12} /> Unavailable
+                    <FiX size={12} /> {t('menuManagement.unavailableBadge')}
                   </div>
                 )}
               </div>
@@ -336,7 +338,7 @@ const MenuManagement = () => {
 
         {filteredItems.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-400">No menu items found</p>
+            <p className="text-gray-400">{t('menuManagement.noItems')}</p>
           </div>
         )}
 
@@ -359,79 +361,78 @@ const MenuManagement = () => {
                 <FiX size={24} />
               </button>
               <h2 className="text-2xl font-playfair font-bold text-gold mb-4">
-                {editingItem ? "Edit Menu Item" : "Add New Menu Item"}
+                {editingItem ? t('menuManagement.editTitle') : t('menuManagement.addTitle')}
               </h2>
 
               <form onSubmit={handleSubmit} className="space-y-4">
-                {/* ... form fields (same as before) ... */}
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Name *</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.nameLabel')} *</label>
                     <input type="text" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" required />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Price *</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.priceLabel')} *</label>
                     <input type="number" step="0.01" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" required />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Category</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.categoryLabel')}</label>
                     <input type="text" value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })} placeholder="Main Course, Dessert, Beverage..." className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Calories</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.caloriesLabel')}</label>
                     <input type="number" value={formData.calories} onChange={(e) => setFormData({ ...formData, calories: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Preparation Time (minutes)</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.prepTimeLabel')}</label>
                     <input type="number" value={formData.preparation_time} onChange={(e) => setFormData({ ...formData, preparation_time: e.target.value })} className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Availability</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.availabilityLabel')}</label>
                     <select value={formData.is_available} onChange={(e) => setFormData({ ...formData, is_available: e.target.value === "true" })} className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold">
-                      <option value="true">Available</option>
-                      <option value="false">Unavailable</option>
+                      <option value="true">{t('menuManagement.availableOption')}</option>
+                      <option value="false">{t('menuManagement.unavailableOption')}</option>
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm mb-1">Short Description</label>
+                  <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.shortDescLabel')}</label>
                   <textarea value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} rows="2" className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm mb-1">Full Description</label>
+                  <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.fullDescLabel')}</label>
                   <textarea value={formData.full_description} onChange={(e) => setFormData({ ...formData, full_description: e.target.value })} rows="3" className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Ingredients (comma separated)</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.ingredientsLabel')}</label>
                     <input type="text" value={formData.ingredients} onChange={(e) => setFormData({ ...formData, ingredients: e.target.value })} placeholder="Beef, cheese, lettuce, tomato..." className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Allergens</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.allergensLabel')}</label>
                     <input type="text" value={formData.allergens} onChange={(e) => setFormData({ ...formData, allergens: e.target.value })} placeholder="Gluten, Dairy, Nuts..." className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Dietary Tags (comma separated)</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.dietaryTagsLabel')}</label>
                     <input type="text" value={formData.dietary_tags} onChange={(e) => setFormData({ ...formData, dietary_tags: e.target.value })} placeholder="Vegetarian, Vegan, Gluten-Free..." className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                   <div>
-                    <label className="block text-gray-300 text-sm mb-1">Nutritional Info (optional)</label>
+                    <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.nutritionalInfoLabel')}</label>
                     <input type="text" value={formData.nutritional_info} onChange={(e) => setFormData({ ...formData, nutritional_info: e.target.value })} placeholder='{"protein": "45g", "carbs": "65g"}' className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:border-gold" />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-gray-300 text-sm mb-1">Image</label>
+                  <label className="block text-gray-300 text-sm mb-1">{t('menuManagement.imageLabel')}</label>
                   <div className="flex items-center gap-4">
                     {imagePreview && <img src={imagePreview} alt="Preview" className="w-20 h-20 object-cover rounded-lg" />}
                     <label className="cursor-pointer bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition">
-                      <FiImage className="inline mr-2" /> Upload Image
+                      <FiImage className="inline mr-2" /> {t('menuManagement.uploadImage')}
                       <input type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
                     </label>
                   </div>
@@ -439,10 +440,10 @@ const MenuManagement = () => {
 
                 <div className="flex gap-3 pt-4">
                   <button type="submit" className="flex-1 bg-gold text-black py-2 rounded-full font-semibold hover:bg-gold-light transition">
-                    {editingItem ? "Update Item" : "Add Item"}
+                    {editingItem ? t('menuManagement.updateButton') : t('menuManagement.addButton')}
                   </button>
                   <button type="button" onClick={resetForm} className="px-6 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition">
-                    Cancel
+                    {t('common.cancel')}
                   </button>
                 </div>
               </form>
@@ -459,10 +460,10 @@ const MenuManagement = () => {
           setItemToDelete(null);
         }}
         onConfirm={handleDeleteConfirm}
-        title="Delete Menu Item"
-        message={`Are you sure you want to delete "${itemToDelete?.name}"? This action cannot be undone.`}
-        confirmText="Yes, Delete"
-        cancelText="Cancel"
+        title={t('menuManagement.deleteTitle')}
+        message={t('menuManagement.deleteMessage', { name: itemToDelete?.name || '' })}
+        confirmText={t('menuManagement.yesDelete')}
+        cancelText={t('common.cancel')}
         type="danger"
       />
     </div>

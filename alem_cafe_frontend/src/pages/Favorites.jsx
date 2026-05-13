@@ -3,12 +3,16 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiHeart, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import { useCart } from '../context/CartContext';
+import { useCurrency } from '../context/CurrencyContext';
+import { useLanguage } from '../context/LanguageContext';
 import toast from 'react-hot-toast';
 import { getImageUrl } from '../services/api';
 
 const Favorites = () => {
   const { favorites, removeFavorite, loading } = useFavorites();
   const { addToCart } = useCart();
+  const { convertPrice, getSymbol } = useCurrency();
+  const { t } = useLanguage();
 
   const handleAddToCart = (item) => {
     const cartItem = {
@@ -18,13 +22,13 @@ const Favorites = () => {
       image: getImageUrl(item.image_url),
     };
     addToCart(cartItem, 1);
-    toast.success(`${item.name} added to cart`);
+    toast.success(`${item.name} ${t('favorites.addedToCart')}`);
   };
 
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
-        <div className="text-white animate-pulse">Loading favorites...</div>
+        <div className="text-white animate-pulse">{t('common.loading')}</div>
       </div>
     );
   }
@@ -32,15 +36,15 @@ const Favorites = () => {
   return (
     <div className="min-h-screen pt-28 pb-20 bg-black/80">
       <div className="container mx-auto px-6">
-        <h1 className="text-3xl font-playfair font-bold text-gold mb-2">My Favorites</h1>
-        <p className="text-gray-400 mb-8">Your saved menu items</p>
+        <h1 className="text-3xl font-playfair font-bold text-gold mb-2">{t('favorites.title')}</h1>
+        <p className="text-gray-400 mb-8">{t('favorites.subtitle')}</p>
 
         {favorites.length === 0 ? (
           <div className="text-center py-12">
             <FiHeart className="text-6xl text-gray-500 mx-auto mb-4" />
-            <p className="text-gray-400 mb-4">No favorites yet</p>
+            <p className="text-gray-400 mb-4">{t('favorites.empty')}</p>
             <Link to="/#menu" className="inline-block bg-gold text-black px-6 py-2 rounded-full font-semibold hover:bg-gold-light transition">
-              Browse Menu
+              {t('favorites.browseMenu')}
             </Link>
           </div>
         ) : (
@@ -73,7 +77,7 @@ const Favorites = () => {
                         <FiTrash2 size={18} />
                       </button>
                     </div>
-                    <p className="text-gold font-bold mt-1">${item.price}</p>
+                    <p className="text-gold font-bold mt-1">{getSymbol()}{convertPrice(item.price)}</p>
                     <p className="text-gray-400 text-sm mt-2 line-clamp-2">{item.description}</p>
                     <button
                       onClick={(e) => {
@@ -83,7 +87,7 @@ const Favorites = () => {
                       }}
                       className="mt-3 w-full bg-gold text-black py-2 rounded-full font-semibold hover:bg-gold-light transition flex items-center justify-center gap-2"
                     >
-                      <FiShoppingBag size={16} /> Add to Cart
+                      <FiShoppingBag size={16} /> {t('favorites.addToCart')}
                     </button>
                   </div>
                 </Link>

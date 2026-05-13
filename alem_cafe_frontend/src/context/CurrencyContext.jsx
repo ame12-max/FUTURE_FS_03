@@ -4,24 +4,17 @@ import { userAPI } from '../services/api';
 
 const CurrencyContext = createContext();
 
-// Exchange rate: 1 USD = ? ETB (you can update this from an API later)
-const EXCHANGE_RATE = 160; // 1 USD = 160 ETB
+const EXCHANGE_RATE = 160;
 
 export const CurrencyProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, getMe } = useAuth();
   const [currency, setCurrency] = useState('ETB');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const loadCurrency = async () => {
       if (user) {
-        try {
-          const res = await userAPI.getProfile();
-          setCurrency(res.data.preferred_currency || 'ETB');
-        } catch (err) {
-          console.error('Failed to load currency:', err);
-          setCurrency('ETB');
-        }
+        setCurrency(user.preferred_currency || 'ETB');
       } else {
         const saved = localStorage.getItem('preferred_currency');
         setCurrency(saved || 'ETB');
@@ -31,32 +24,41 @@ export const CurrencyProvider = ({ children }) => {
     loadCurrency();
   }, [user]);
 
-  // Convert price from ETB (database) to selected currency
   const convertPrice = (priceETB) => {
     const numPrice = typeof priceETB === 'string' ? parseFloat(priceETB) : priceETB;
     if (currency === 'USD') {
-      // Convert ETB to USD
       return (numPrice / EXCHANGE_RATE).toFixed(2);
     }
-    // Return ETB as is
     return numPrice.toFixed(2);
   };
 
   const getSymbol = () => {
-    return currency === 'ETB' ? 'Br' : '$';
+    return currency === 'ETB' ? 'Br ' : '$ ';
   };
 
   const toggleCurrency = async () => {
     const newCurrency = currency === 'USD' ? 'ETB' : 'USD';
-    setCurrency(newCurrency);
     
     if (user) {
       try {
+        // Optimistically update UI
+        setCurrency(newCurrency);
+        
+        // Save to backend
         await userAPI.updateProfile({ preferred_currency: newCurrency });
+        
+        // Refresh user data to confirm
+        const updatedUser = await getMe();
+        if (updatedUser && updatedUser.preferred_currency) {
+          setCurrency(updatedUser.preferred_currency);
+        }
       } catch (err) {
         console.error('Failed to save currency preference:', err);
+        // Revert on error
+        setCurrency(currency);
       }
     } else {
+      setCurrency(newCurrency);
       localStorage.setItem('preferred_currency', newCurrency);
     }
   };

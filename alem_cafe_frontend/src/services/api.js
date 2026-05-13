@@ -58,6 +58,10 @@ export const newsletterAPI = {
 
 export const reservationAPI = {
   create: (data) => api.post('/reservations', data),
+  getMyReservations: () => api.get('/reservations/my'),
+  cancel: (id) => api.put(`/reservations/${id}/cancel`),
+  getAllAdmin: () => api.get('/reservations/admin'),
+  updateStatus: (id, status) => api.put(`/reservations/admin/${id}/status`, { status })
 };
 export const cartAPI = {
   getCart: () => api.get('/cart'),
@@ -95,5 +99,7 @@ export const userAPI = {
   updateProfile: (data) => api.put('/user/profile', data),
   changePassword: (data) => api.put('/user/change-password', data),
 };
+
+
 
 export default api;

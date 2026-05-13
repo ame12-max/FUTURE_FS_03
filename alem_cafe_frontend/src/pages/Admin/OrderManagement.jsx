@@ -11,13 +11,16 @@ import {
   FiCoffee, 
   FiXCircle,
   FiEye,
-  FiRefreshCw,
   FiBell
 } from 'react-icons/fi';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
+import { useCurrency } from '../../context/CurrencyContext';
 
 const OrderManagement = () => {
   const { user, isAdmin } = useAuth();
+  const { t } = useLanguage();
+  const { convertPrice, getSymbol } = useCurrency();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -25,12 +28,12 @@ const OrderManagement = () => {
   const [notifications, setNotifications] = useState([]);
 
   const statuses = [
-    { key: 'pending', label: 'Pending', icon: FiClock, color: 'text-yellow-500', bg: 'bg-yellow-500/20' },
-    { key: 'confirmed', label: 'Confirmed', icon: FiCheckCircle, color: 'text-blue-500', bg: 'bg-blue-500/20' },
-    { key: 'preparing', label: 'Preparing', icon: FiCoffee, color: 'text-purple-500', bg: 'bg-purple-500/20' },
-    { key: 'ready', label: 'Ready', icon: FiPackage, color: 'text-orange-500', bg: 'bg-orange-500/20' },
-    { key: 'delivered', label: 'Delivered', icon: FiTruck, color: 'text-green-500', bg: 'bg-green-500/20' },
-    { key: 'cancelled', label: 'Cancelled', icon: FiXCircle, color: 'text-red-500', bg: 'bg-red-500/20' },
+    { key: 'pending', label: t('status.pending'), icon: FiClock, color: 'text-yellow-500', bg: 'bg-yellow-500/20' },
+    { key: 'confirmed', label: t('status.confirmed'), icon: FiCheckCircle, color: 'text-blue-500', bg: 'bg-blue-500/20' },
+    { key: 'preparing', label: t('status.preparing'), icon: FiCoffee, color: 'text-purple-500', bg: 'bg-purple-500/20' },
+    { key: 'ready', label: t('status.ready'), icon: FiPackage, color: 'text-orange-500', bg: 'bg-orange-500/20' },
+    { key: 'delivered', label: t('status.delivered'), icon: FiTruck, color: 'text-green-500', bg: 'bg-green-500/20' },
+    { key: 'cancelled', label: t('status.cancelled'), icon: FiXCircle, color: 'text-red-500', bg: 'bg-red-500/20' },
   ];
 
   useEffect(() => {
@@ -47,7 +50,7 @@ const OrderManagement = () => {
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch orders:', err);
-      toast.error('Failed to load orders');
+      toast.error(t('orderManagement.fetchError'));
       setLoading(false);
     }
   };
@@ -56,13 +59,13 @@ const OrderManagement = () => {
     setUpdating(true);
     try {
       await adminAPI.updateOrderStatus(orderId, newStatus);
-      toast.success(`Order #${orderId} status updated to ${newStatus}`);
+      toast.success(t('orderManagement.statusUpdated', { orderId, newStatus }));
       fetchOrders();
       
       // Add notification
-      addNotification(`Order #${orderId} status changed to ${newStatus}`);
+      addNotification(t('orderManagement.notificationMessage', { orderId, newStatus }));
     } catch (err) {
-      toast.error('Failed to update status');
+      toast.error(t('orderManagement.updateError'));
     } finally {
       setUpdating(false);
     }
@@ -102,7 +105,7 @@ const OrderManagement = () => {
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
-        <div className="text-white">Loading orders...</div>
+        <div className="text-white animate-pulse">{t('common.loading')}</div>
       </div>
     );
   }
@@ -112,13 +115,8 @@ const OrderManagement = () => {
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-playfair font-bold text-gold">Order Management</h1>
-          <button
-            onClick={fetchOrders}
-            className="bg-gold/20 text-gold px-4 py-2 rounded-full flex items-center gap-2 hover:bg-gold/30 transition"
-          >
-            <FiRefreshCw size={16} /> Refresh
-          </button>
+          <h1 className="text-3xl font-playfair font-bold text-gold">{t('orderManagement.title')}</h1>
+         
         </div>
 
         {/* Notifications */}
@@ -147,7 +145,7 @@ const OrderManagement = () => {
           {orders.length === 0 ? (
             <div className="text-center py-12 bg-white/5 rounded-2xl">
               <FiPackage className="text-5xl text-gray-500 mx-auto mb-3" />
-              <p className="text-gray-400">No orders found</p>
+              <p className="text-gray-400">{t('orderManagement.noOrders')}</p>
             </div>
           ) : (
             orders.map((order) => (
@@ -160,14 +158,15 @@ const OrderManagement = () => {
                 {/* Order Header */}
                 <div className="p-4 border-b border-white/10 flex flex-wrap justify-between items-center gap-3">
                   <div>
-                    <h3 className="text-lg font-bold text-gold">Order #{order.id}</h3>
+                    <h3 className="text-lg font-bold text-gold">{t('orderManagement.orderNumber')} #{order.id}</h3>
                     <p className="text-gray-400 text-sm">
                       {new Date(order.created_at).toLocaleString()}
                     </p>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusBg(order.status)} ${getStatusColor(order.status)}`}>
-                      {order.status.toUpperCase()}
+                      <getStatusIcon status={order.status} className="inline mr-1" />
+                      {t(`status.${order.status}`, order.status)}
                     </span>
                     <button
                       onClick={() => setSelectedOrder(selectedOrder === order.id ? null : order.id)}
@@ -183,18 +182,18 @@ const OrderManagement = () => {
                   <div className="p-4 bg-white/5">
                     <div className="grid md:grid-cols-2 gap-4 mb-4">
                       <div>
-                        <p className="text-gray-400 text-sm">Customer</p>
+                        <p className="text-gray-400 text-sm">{t('orderManagement.customer')}</p>
                         <p className="text-white">{order.customer_name}</p>
                         <p className="text-gray-300 text-sm">{order.customer_email}</p>
                         <p className="text-gray-300 text-sm">{order.customer_phone}</p>
                       </div>
                       <div>
-                        <p className="text-gray-400 text-sm">Order Details</p>
-                        <p className="text-white">Type: {order.order_type?.replace('_', ' ').toUpperCase()}</p>
-                        <p className="text-white">Payment: {order.payment_method?.toUpperCase()}</p>
-                        <p className="text-white">Total: ${order.total_amount}</p>
+                        <p className="text-gray-400 text-sm">{t('orderManagement.orderDetails')}</p>
+                        <p className="text-white">{t('orderManagement.type')}: {t(`orderType.${order.order_type}`, order.order_type?.replace('_', ' ')?.toUpperCase())}</p>
+                        <p className="text-white">{t('orderManagement.payment')}: {order.payment_method?.toUpperCase()}</p>
+                        <p className="text-white">{t('orderManagement.total')}: {getSymbol()}{convertPrice(order.total_amount)}</p>
                         {order.delivery_address && (
-                          <p className="text-gray-300 text-sm">Address: {order.delivery_address}</p>
+                          <p className="text-gray-300 text-sm">{t('orderManagement.address')}: {order.delivery_address}</p>
                         )}
                       </div>
                     </div>
@@ -202,12 +201,12 @@ const OrderManagement = () => {
                     {/* Items */}
                     {order.items && order.items.length > 0 && (
                       <div className="mb-4">
-                        <p className="text-gray-400 text-sm mb-2">Items</p>
+                        <p className="text-gray-400 text-sm mb-2">{t('orderManagement.items')}</p>
                         <div className="space-y-1">
                           {order.items.map((item, idx) => (
                             <div key={idx} className="flex justify-between text-sm">
                               <span className="text-white">{item.quantity}x {item.item_name}</span>
-                              <span className="text-gold">${(item.unit_price * item.quantity).toFixed(2)}</span>
+                              <span className="text-gold">{getSymbol()}{convertPrice(item.unit_price * item.quantity)}</span>
                             </div>
                           ))}
                         </div>
@@ -217,7 +216,7 @@ const OrderManagement = () => {
                     {/* Status Update */}
                     {order.status !== 'delivered' && order.status !== 'cancelled' && (
                       <div className="mt-4 pt-3 border-t border-white/10">
-                        <p className="text-gray-400 text-sm mb-2">Update Status</p>
+                        <p className="text-gray-400 text-sm mb-2">{t('orderManagement.updateStatus')}</p>
                         <div className="flex flex-wrap gap-2">
                           {statuses.map((status) => {
                             const currentIndex = statuses.findIndex(s => s.key === order.status);

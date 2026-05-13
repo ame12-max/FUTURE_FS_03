@@ -3,9 +3,11 @@ import { FiStar, FiSend } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
 import { menuAPI } from '../../services/api';
 import toast from 'react-hot-toast';
+import { useLanguage } from '../../context/LanguageContext';
 
 const Reviews = ({ menuItemId, onReviewAdded }) => {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(5);
@@ -31,24 +33,24 @@ const Reviews = ({ menuItemId, onReviewAdded }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!user) {
-      toast.error('Please login to leave a review');
+      toast.error(t('reviews.loginRequired'));
       return;
     }
     if (!comment.trim()) {
-      toast.error('Please write a comment');
+      toast.error(t('reviews.commentRequired'));
       return;
     }
     
     setSubmitting(true);
     try {
       await menuAPI.addReview(menuItemId, { rating, comment });
-      toast.success('Review added!');
+      toast.success(t('reviews.addSuccess'));
       setComment('');
       setRating(5);
       fetchReviews();
       if (onReviewAdded) onReviewAdded();
     } catch (err) {
-      toast.error('Failed to add review');
+      toast.error(t('reviews.addError'));
     } finally {
       setSubmitting(false);
     }
@@ -79,24 +81,26 @@ const Reviews = ({ menuItemId, onReviewAdded }) => {
     : 0;
 
   if (loading) {
-    return <div className="text-gray-400">Loading reviews...</div>;
+    return <div className="text-gray-400">{t('common.loading')}</div>;
   }
 
   return (
     <div className="mt-8 border-t border-white/20 pt-8">
-      <h3 className="text-2xl font-playfair font-bold text-gold mb-4">Customer Reviews</h3>
+      <h3 className="text-2xl font-playfair font-bold text-gold mb-4">{t('reviews.title')}</h3>
       
       {/* Rating Summary */}
       <div className="bg-white/5 rounded-xl p-4 mb-6">
         <div className="flex items-center gap-4">
           <div className="text-center">
             <div className="text-4xl font-bold text-gold">{averageRating}</div>
-            <div className="text-sm text-gray-400">out of 5</div>
+            <div className="text-sm text-gray-400">{t('reviews.outOf5')}</div>
           </div>
           <div className="flex-1">
             <div className="flex items-center gap-2 mb-1">
               {renderStars(averageRating)}
-              <span className="text-sm text-gray-400">({reviews.length} reviews)</span>
+              <span className="text-sm text-gray-400">
+                ({reviews.length} {reviews.length === 1 ? t('reviews.review') : t('reviews.reviews')})
+              </span>
             </div>
           </div>
         </div>
@@ -105,18 +109,18 @@ const Reviews = ({ menuItemId, onReviewAdded }) => {
       {/* Review Form */}
       {user ? (
         <form onSubmit={handleSubmit} className="bg-white/5 rounded-xl p-6 mb-8">
-          <h4 className="text-lg font-semibold text-gold mb-3">Write a Review</h4>
+          <h4 className="text-lg font-semibold text-gold mb-3">{t('reviews.writeReview')}</h4>
           <div className="mb-4">
-            <label className="block text-sm text-gray-300 mb-2">Your Rating</label>
+            <label className="block text-sm text-gray-300 mb-2">{t('reviews.yourRating')}</label>
             {renderStars(rating, true, setRating)}
           </div>
           <div className="mb-4">
-            <label className="block text-sm text-gray-300 mb-2">Your Comment</label>
+            <label className="block text-sm text-gray-300 mb-2">{t('reviews.yourComment')}</label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               rows="3"
-              placeholder="Share your experience with this dish..."
+              placeholder={t('reviews.commentPlaceholder')}
               className="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold"
               required
             />
@@ -126,20 +130,20 @@ const Reviews = ({ menuItemId, onReviewAdded }) => {
             disabled={submitting}
             className="bg-gold text-black px-6 py-2 rounded-full font-semibold hover:bg-gold-light transition disabled:opacity-50 flex items-center gap-2"
           >
-            <FiSend /> {submitting ? 'Submitting...' : 'Submit Review'}
+            <FiSend /> {submitting ? t('reviews.submitting') : t('reviews.submit')}
           </button>
         </form>
       ) : (
         <div className="bg-white/5 rounded-xl p-6 text-center mb-8">
-          <p className="text-gray-300">Login to leave a review</p>
-          <a href="/login" className="inline-block mt-2 text-gold hover:underline">Login</a>
+          <p className="text-gray-300">{t('reviews.loginPrompt')}</p>
+          <a href="/login" className="inline-block mt-2 text-gold hover:underline">{t('reviews.loginLink')}</a>
         </div>
       )}
       
       {/* Reviews List */}
       <div className="space-y-4">
         {reviews.length === 0 ? (
-          <p className="text-gray-400 text-center py-8">No reviews yet. Be the first to review!</p>
+          <p className="text-gray-400 text-center py-8">{t('reviews.noReviews')}</p>
         ) : (
           reviews.map((review) => (
             <div key={review.id} className="bg-white/5 rounded-xl p-4">
@@ -147,7 +151,7 @@ const Reviews = ({ menuItemId, onReviewAdded }) => {
                 <div>
                   <div className="flex items-center gap-2 mb-1">
                     {renderStars(review.rating)}
-                    <span className="font-semibold text-white">{review.user_name || 'Guest'}</span>
+                    <span className="font-semibold text-white">{review.user_name || t('reviews.guest')}</span>
                   </div>
                 </div>
                 <span className="text-xs text-gray-500">

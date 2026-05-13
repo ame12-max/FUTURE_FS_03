@@ -77,7 +77,7 @@ const UserDashboard = () => {
                           order.status === 'pending' ? 'bg-yellow-500 text-black' :
                           'bg-blue-500 text-white'
                         }`}>
-                          {order.status.toUpperCase()}
+                          {t(`status.${order.status}`)}
                         </span>
                       </div>
                     </div>

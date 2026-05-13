@@ -1,20 +1,19 @@
 import { createContext, useContext, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { authAPI } from '../services/api';
-
+import { authAPI, userAPI } from '../services/api';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const navigate = useNavigate(); 
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
   useEffect(() => {
     if (token) {
       authAPI.getMe()
-        .then(res => setUser(res.data))
+        .then(res => {
+          setUser(res.data);
+        })
         .catch(() => {
           localStorage.removeItem('token');
           setToken(null);
@@ -25,11 +24,23 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  const updateUser = (updatedUser) => {
+    setUser(prev => ({ ...prev, ...updatedUser }));
+  };
+
   const login = async (email, password) => {
     const res = await authAPI.login({ email, password });
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
-    setUser(res.data.user);
+    // Make sure we set the user with preferences from response
+    setUser({
+      id: res.data.user.id,
+      name: res.data.user.name,
+      email: res.data.user.email,
+      role: res.data.user.role,
+      preferred_currency: res.data.user.preferred_currency || 'ETB',
+      preferred_language: res.data.user.preferred_language || 'en'
+    });
     return res.data;
   };
 
@@ -37,21 +48,45 @@ export const AuthProvider = ({ children }) => {
     const res = await authAPI.register({ name, email, password });
     localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
-    setUser(res.data.user);
+    setUser({
+      id: res.data.user.id,
+      name: res.data.user.name,
+      email: res.data.user.email,
+      role: res.data.user.role,
+      preferred_currency: res.data.user.preferred_currency || 'ETB',
+      preferred_language: res.data.user.preferred_language || 'en'
+    });
     return res.data;
   };
 
+const getMe = async () => {
+  try {
+    const res = await authAPI.getMe();
+    setUser(res.data);
+    return res.data;
+  } catch (err) {
+    console.error('Failed to get user:', err);
+    return null;
+  }
+};
+
   const logout = () => {
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/');
-    
     setToken(null);
     setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, isAdmin: user?.role === 'admin' || user?.role === 'manager' }}>
+    <AuthContext.Provider value={{ 
+      user, 
+      loading, 
+      login, 
+      register, 
+      logout, 
+      updateUser,
+      getMe,
+      isAdmin: user?.role === 'admin' || user?.role === 'manager' 
+    }}>
       {children}
     </AuthContext.Provider>
   );

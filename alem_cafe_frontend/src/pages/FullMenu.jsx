@@ -6,6 +6,7 @@ import { menuAPI, getImageUrl } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { useCurrency } from '../context/CurrencyContext';
+import { useLanguage } from '../context/LanguageContext';
 import toast from 'react-hot-toast';
 
 const FullMenu = () => {
@@ -15,7 +16,7 @@ const FullMenu = () => {
   const { addToCart } = useCart();
   const { user } = useAuth();
   const { convertPrice, getSymbol } = useCurrency();
-
+  const { t } = useLanguage();
 
   useEffect(() => {
     const saved = localStorage.getItem('likedMenuItems');
@@ -26,7 +27,9 @@ const FullMenu = () => {
     const fetchMenu = async () => {
       try {
         const res = await menuAPI.getAll();
-        setMenuItems(res.data);
+        // Filter to only show available items
+        const availableItems = res.data.filter(item => item.is_available === 1);
+        setMenuItems(availableItems);
         setLoading(false);
       } catch (err) {
         console.error('Failed to load menu:', err);
@@ -53,16 +56,16 @@ const FullMenu = () => {
     addToCart(cartItem, 1);
     
     if (user) {
-      toast.success(`${item.name} added to cart!`);
+      toast.success(`${item.name} ${t('menu.addedToCart')}`);
     } else {
-      toast.success(`${item.name} added to cart! (Login to save permanently)`);
+      toast.success(`${item.name} ${t('menu.addedToCartGuest')}`);
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
-        <div className="text-white animate-pulse">Loading menu...</div>
+        <div className="text-white animate-pulse">{t('common.loading')}</div>
       </div>
     );
   }
@@ -71,7 +74,7 @@ const FullMenu = () => {
     <div className="min-h-screen pt-28 pb-20 bg-black/80">
       <div className="container mx-auto px-6">
         <Link to="/#menu" className="inline-flex items-center gap-2 text-gold hover:text-yellow-400 mb-6">
-          <FiArrowLeft /> Back to Menu
+          <FiArrowLeft /> {t('fullMenu.backToMenu')}
         </Link>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -79,9 +82,9 @@ const FullMenu = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-gold">Full Menu</h2>
+          <h2 className="text-4xl md:text-5xl font-playfair font-bold text-gold">{t('fullMenu.title')}</h2>
           <p className="text-gray-300 mt-2 max-w-2xl mx-auto">
-            Explore our complete selection of delicious eats and drinks.
+            {t('fullMenu.subtitle')}
           </p>
         </motion.div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -127,7 +130,7 @@ const FullMenu = () => {
                         handleAddToCart(item);
                       }}
                       className="bg-gold text-black p-2 rounded-full hover:bg-gold-light transition"
-                      aria-label="Add to cart"
+                      aria-label={t('menu.addToCart')}
                     >
                       <FiPlus size={18} />
                     </button>

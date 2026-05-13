@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMenu, FiX, FiShoppingCart, FiUser, FiHeart, FiGlobe } from "react-icons/fi";
+import { FiMenu, FiX, FiShoppingCart, FiUser, FiHeart, FiCalendar } from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useLanguage } from "../../context/LanguageContext";
 import CartDrawer from "../Cart/CartDrawer";
+import ReservationModal from "../Reservation/ReservationModal";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
+  const [reserveOpen, setReserveOpen] = useState(false);
   const { user, logout, isAdmin } = useAuth();
   const { itemCount } = useCart();
   const { t, language, toggleLanguage } = useLanguage();
@@ -25,15 +27,8 @@ const Navbar = () => {
   }, []);
 
   const links = ["Home", "Menu", "About", "Gallery", "Contact"];
-  const translatedLinks = {
-    Home: t('nav.home'),
-    Menu: t('nav.menu'),
-    About: t('nav.about'),
-    Gallery: t('nav.gallery'),
-    Contact: t('nav.contact')
-  };
 
-  const handleNavClick = (link, e) => {
+  const handleNavClick = (link) => {
     if (link === "Home") {
       if (isHomePage) {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -60,30 +55,41 @@ const Navbar = () => {
         className={`fixed w-full z-50 transition-all duration-500 ${
           scrolled
             ? "bg-black/80 backdrop-blur-xl py-3 border-b border-white/10 shadow-lg"
-            : "bg-transparent py-5"
+            : "bg-transparent py-4 md:py-5"
         }`}
       >
         <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
           {/* Logo */}
           <Link
             to="/"
-            className="text-2xl md:text-3xl font-playfair font-bold text-gold tracking-wide hover:scale-105 transition-transform duration-300"
+            className="text-xl sm:text-2xl md:text-3xl font-playfair font-bold text-gold tracking-wide hover:scale-105 transition-transform duration-300"
           >
             {t('nav.alemCafe')}
           </Link>
 
           {/* Desktop Menu */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {links.map((link) => (
               <button
                 key={link}
-                onClick={(e) => handleNavClick(link, e)}
-                className="text-white hover:text-gold transition font-medium relative group"
+                onClick={() => handleNavClick(link)}
+                className="text-white hover:text-gold transition font-medium relative group text-sm lg:text-base"
               >
-                {translatedLinks[link]}
+                {t(`nav.${link.toLowerCase()}`)}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
               </button>
             ))}
+            
+            {/* Reserve Button */}
+            <button
+              onClick={() => setReserveOpen(true)}
+              className="bg-gold/20 hover:bg-gold/30 text-gold px-4 py-2 rounded-full text-sm font-semibold transition flex items-center gap-2"
+            >
+              <FiCalendar size={16} />
+              {t('nav.reserveTable')}
+            </button>
+
+            {/* Cart */}
             <button
               onClick={() => setCartOpen(true)}
               className="relative text-white hover:text-gold transition p-2 rounded-full hover:bg-white/10"
@@ -95,30 +101,52 @@ const Navbar = () => {
                 </span>
               )}
             </button>
+
+            {/* Language Switcher */}
+            <div className="flex gap-1 bg-white/10 rounded-full p-1">
+              <button
+                onClick={() => language !== 'en' && toggleLanguage()}
+                className={`px-3 py-1 rounded-full text-sm transition ${
+                  language === 'en' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                }`}
+              >
+                EN
+              </button>
+              <button
+                onClick={() => language !== 'am' && toggleLanguage()}
+                className={`px-3 py-1 rounded-full text-sm transition ${
+                  language === 'am' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                }`}
+              >
+                አማ
+              </button>
+            </div>
+
+            {/* User Menu */}
             {user ? (
               <div className="relative group">
                 <button className="flex items-center gap-2 text-white hover:text-gold transition px-3 py-2 rounded-full hover:bg-white/10">
                   <FiUser size={18} />
-                  <span>{user.name.split(" ")[0]}</span>
+                  <span className="text-sm">{user.name.split(" ")[0]}</span>
                 </button>
                 <div className="absolute right-0 mt-2 w-56 bg-black/90 backdrop-blur-xl rounded-xl overflow-hidden hidden group-hover:block border border-white/10 shadow-xl">
                   <Link
                     to="/dashboard"
-                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
+                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                   >
                     <FiUser size={16} />
                     {t('nav.myOrders')}
                   </Link>
                   <Link
                     to="/favorites"
-                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
+                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                   >
                     <FiHeart size={16} />
                     {t('nav.favorites')}
                   </Link>
                   <Link
                     to="/account"
-                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
+                    className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                   >
                     <FiUser size={16} />
                     {t('nav.accountSettings')}
@@ -126,7 +154,7 @@ const Navbar = () => {
                   {isAdmin && (
                     <Link
                       to="/admin"
-                      className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition"
+                      className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                     >
                       <FiUser size={16} />
                       {t('nav.adminPanel')}
@@ -134,7 +162,7 @@ const Navbar = () => {
                   )}
                   <button
                     onClick={logout}
-                    className="w-full text-left px-4 py-3 text-red-400 hover:bg-white/10 transition"
+                    className="w-full text-left px-4 py-3 text-red-400 hover:bg-white/10 transition text-sm"
                   >
                     {t('nav.logout')}
                   </button>
@@ -143,7 +171,7 @@ const Navbar = () => {
             ) : (
               <Link
                 to="/login"
-                className="text-white hover:text-gold transition px-4 py-2 rounded-full hover:bg-white/10"
+                className="text-white hover:text-gold transition px-4 py-2 rounded-full hover:bg-white/10 text-sm"
               >
                 {t('nav.login')}
               </Link>
@@ -165,18 +193,32 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl py-6 border-t border-white/10 shadow-xl"
+            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl py-6 border-t border-white/10 shadow-xl max-h-[80vh] overflow-y-auto"
           >
-            <div className="flex flex-col items-center gap-5">
+            <div className="flex flex-col items-center gap-4">
               {links.map((link) => (
                 <button
                   key={link}
                   onClick={() => handleNavClick(link)}
                   className="text-white hover:text-gold text-lg py-2 transition"
                 >
-                  {translatedLinks[link]}
+                  {t(`nav.${link.toLowerCase()}`)}
                 </button>
               ))}
+              
+              {/* Reserve Button - Mobile */}
+              <button
+                onClick={() => {
+                  setReserveOpen(true);
+                  setIsOpen(false);
+                }}
+                className="bg-gold/20 hover:bg-gold/30 text-gold px-6 py-2 rounded-full text-base font-semibold transition flex items-center gap-2"
+              >
+                <FiCalendar size={18} />
+                {t('nav.reserveTable')}
+              </button>
+
+              {/* Cart - Mobile */}
               <button
                 onClick={() => {
                   setCartOpen(true);
@@ -188,17 +230,21 @@ const Navbar = () => {
                 {t('nav.cart')} ({itemCount > 9 ? "9+" : itemCount})
               </button>
               
-              {/* Language Switcher in Mobile Menu */}
+              {/* Language Switcher - Mobile */}
               <div className="flex gap-3 py-2">
                 <button
                   onClick={() => language !== 'en' && toggleLanguage()}
-                  className={`px-3 py-1 rounded-lg text-sm transition ${language === 'en' ? 'bg-gold text-black' : 'text-white hover:text-gold'}`}
+                  className={`px-4 py-2 rounded-lg text-sm transition ${
+                    language === 'en' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                  }`}
                 >
                   English
                 </button>
                 <button
                   onClick={() => language !== 'am' && toggleLanguage()}
-                  className={`px-3 py-1 rounded-lg text-sm transition ${language === 'am' ? 'bg-gold text-black' : 'text-white hover:text-gold'}`}
+                  className={`px-4 py-2 rounded-lg text-sm transition ${
+                    language === 'am' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                  }`}
                 >
                   አማርኛ
                 </button>
@@ -260,6 +306,7 @@ const Navbar = () => {
         )}
       </nav>
       <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
+      <ReservationModal isOpen={reserveOpen} onClose={() => setReserveOpen(false)} />
     </>
   );
 };

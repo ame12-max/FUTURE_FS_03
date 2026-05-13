@@ -7,20 +7,15 @@ import { FiUser, FiMail, FiPhone, FiDollarSign, FiLock, FiSave, FiGlobe } from '
 import toast from 'react-hot-toast';
 import { useLanguage } from '../context/LanguageContext';
 
-
-
 const AccountManagement = () => {
   const { user } = useAuth();
   const { currency, toggleCurrency, getSymbol, exchangeRate, convertPrice } = useCurrency();
+  const { t, language, toggleLanguage } = useLanguage();
   
   const [profile, setProfile] = useState({ name: '', email: '', phone: '' });
   const [passwordData, setPasswordData] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const { language, toggleLanguage } = useLanguage();
-
-
-
 
   useEffect(() => {
     if (user) {
@@ -36,9 +31,9 @@ const AccountManagement = () => {
     setSaving(true);
     try {
       await userAPI.updateProfile(profile);
-      toast.success('Profile updated');
+      toast.success(t('profileUpdated'));
     } catch (err) {
-      toast.error('Failed to update profile');
+      toast.error(t('profileUpdateFailed'));
     } finally {
       setSaving(false);
     }
@@ -47,11 +42,11 @@ const AccountManagement = () => {
   const handlePasswordChange = async (e) => {
     e.preventDefault();
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      toast.error('Passwords do not match');
+      toast.error(t('passwordsDoNotMatch'));
       return;
     }
     if (passwordData.newPassword.length < 6) {
-      toast.error('Password must be at least 6 characters');
+      toast.error(t('passwordMinLength'));
       return;
     }
     setSaving(true);
@@ -60,10 +55,10 @@ const AccountManagement = () => {
         currentPassword: passwordData.currentPassword,
         newPassword: passwordData.newPassword
       });
-      toast.success('Password changed');
+      toast.success(t('passwordChanged'));
       setPasswordData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (err) {
-      toast.error(err.response?.data?.error || 'Failed to change password');
+      toast.error(err.response?.data?.error || t('passwordChangeFailed'));
     } finally {
       setSaving(false);
     }
@@ -72,7 +67,7 @@ const AccountManagement = () => {
   if (loading) {
     return (
       <div className="min-h-screen pt-28 pb-20 bg-black/80 flex items-center justify-center">
-        <div className="text-white animate-pulse">Loading...</div>
+        <div className="text-white animate-pulse">{t('common.loading')}</div>
       </div>
     );
   }
@@ -80,8 +75,8 @@ const AccountManagement = () => {
   return (
     <div className="min-h-screen pt-28 pb-20 bg-black/80">
       <div className="container mx-auto px-6 max-w-4xl">
-        <h1 className="text-3xl font-playfair font-bold text-gold mb-2">Account Settings</h1>
-        <p className="text-gray-400 mb-8">Manage your profile and preferences</p>
+        <h1 className="text-3xl font-playfair font-bold text-gold mb-2">{t('account.title')}</h1>
+        <p className="text-gray-400 mb-8">{t('account.subtitle')}</p>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Profile Section */}
@@ -91,11 +86,11 @@ const AccountManagement = () => {
             className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10"
           >
             <h2 className="text-xl font-playfair font-bold text-gold mb-4 flex items-center gap-2">
-              <FiUser /> Profile Information
+              <FiUser /> {t('account.profileInfo')}
             </h2>
             <form onSubmit={handleProfileUpdate} className="space-y-4">
               <div>
-                <label className="block text-gray-300 text-sm mb-1">Full Name</label>
+                <label className="block text-gray-300 text-sm mb-1">{t('account.fullName')}</label>
                 <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2">
                   <FiUser className="text-gray-400" />
                   <input
@@ -108,7 +103,7 @@ const AccountManagement = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 text-sm mb-1">Email</label>
+                <label className="block text-gray-300 text-sm mb-1">{t('account.email')}</label>
                 <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2">
                   <FiMail className="text-gray-400" />
                   <input
@@ -121,7 +116,7 @@ const AccountManagement = () => {
                 </div>
               </div>
               <div>
-                <label className="block text-gray-300 text-sm mb-1">Phone</label>
+                <label className="block text-gray-300 text-sm mb-1">{t('account.phone')}</label>
                 <div className="flex items-center gap-2 bg-white/10 rounded-lg px-3 py-2">
                   <FiPhone className="text-gray-400" />
                   <input
@@ -138,7 +133,7 @@ const AccountManagement = () => {
                 disabled={saving}
                 className="w-full bg-gold text-black py-2 rounded-lg font-semibold hover:bg-gold-light transition flex items-center justify-center gap-2"
               >
-                <FiSave /> {saving ? 'Saving...' : 'Save Changes'}
+                <FiSave /> {saving ? t('account.saving') : t('account.saveChanges')}
               </button>
             </form>
           </motion.div>
@@ -153,11 +148,11 @@ const AccountManagement = () => {
             {/* Currency Preference */}
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-playfair font-bold text-gold mb-4 flex items-center gap-2">
-                <FiDollarSign /> Currency Preference
+                <FiDollarSign /> {t('account.currencyPref')}
               </h2>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-white">Display prices in</p>
+                  <p className="text-white">{t('account.displayPricesIn')}</p>
                   <p className="text-sm text-gray-400">1 USD = {exchangeRate} ETB</p>
                 </div>
                 <div className="flex gap-2">
@@ -176,18 +171,39 @@ const AccountManagement = () => {
                 </div>
               </div>
               <div className="mt-3 text-sm text-gray-400">
-                <p>Example: $10.00 = {getSymbol()}{convertPrice(10)}</p>
+                <p>{t('account.example')}: $10.00 = {getSymbol()}{convertPrice(10)}</p>
+              </div>
+            </div>
+
+            {/* Language Preference */}
+            <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
+              <h2 className="text-xl font-playfair font-bold text-gold mb-4 flex items-center gap-2">
+                <FiGlobe /> {t('account.languagePref')}
+              </h2>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => language !== 'en' && toggleLanguage()}
+                  className={`px-4 py-2 rounded-lg transition ${language === 'en' ? 'bg-gold text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => language !== 'am' && toggleLanguage()}
+                  className={`px-4 py-2 rounded-lg transition ${language === 'am' ? 'bg-gold text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
+                >
+                  አማርኛ
+                </button>
               </div>
             </div>
 
             {/* Change Password */}
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
               <h2 className="text-xl font-playfair font-bold text-gold mb-4 flex items-center gap-2">
-                <FiLock /> Change Password
+                <FiLock /> {t('account.changePassword')}
               </h2>
               <form onSubmit={handlePasswordChange} className="space-y-4">
                 <div>
-                  <label className="block text-gray-300 text-sm mb-1">Current Password</label>
+                  <label className="block text-gray-300 text-sm mb-1">{t('account.currentPassword')}</label>
                   <input
                     type="password"
                     value={passwordData.currentPassword}
@@ -197,7 +213,7 @@ const AccountManagement = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-300 text-sm mb-1">New Password</label>
+                  <label className="block text-gray-300 text-sm mb-1">{t('account.newPassword')}</label>
                   <input
                     type="password"
                     value={passwordData.newPassword}
@@ -207,7 +223,7 @@ const AccountManagement = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-gray-300 text-sm mb-1">Confirm New Password</label>
+                  <label className="block text-gray-300 text-sm mb-1">{t('account.confirmPassword')}</label>
                   <input
                     type="password"
                     value={passwordData.confirmPassword}
@@ -221,30 +237,11 @@ const AccountManagement = () => {
                   disabled={saving}
                   className="w-full bg-gold text-black py-2 rounded-lg font-semibold hover:bg-gold-light transition"
                 >
-                  {saving ? 'Updating...' : 'Change Password'}
+                  {saving ? t('account.updating') : t('account.changePasswordBtn')}
                 </button>
               </form>
             </div>
           </motion.div>
-          <motion.div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10">
-  <h2 className="text-xl font-playfair font-bold text-gold mb-4 flex items-center gap-2">
-    <FiGlobe /> Language Preference
-  </h2>
-  <div className="flex gap-2">
-    <button
-      onClick={() => language !== 'en' && toggleLanguage()}
-      className={`px-4 py-2 rounded-lg transition ${language === 'en' ? 'bg-gold text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
-    >
-      English
-    </button>
-    <button
-      onClick={() => language !== 'am' && toggleLanguage()}
-      className={`px-4 py-2 rounded-lg transition ${language === 'am' ? 'bg-gold text-black' : 'bg-white/10 text-white hover:bg-white/20'}`}
-    >
-      አማርኛ (Amharic)
-    </button>
-  </div>
-</motion.div>
         </div>
       </div>
     </div>

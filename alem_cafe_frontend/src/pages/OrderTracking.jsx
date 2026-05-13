@@ -38,7 +38,7 @@ const OrderTracking = () => {
       setLoading(false);
     } catch (err) {
       console.error('Failed to fetch order:', err);
-      toast.error(t('orderNotFound'));
+      toast.error(t('orderTracking.orderNotFound'));
       navigate('/dashboard');
     }
   };
@@ -57,7 +57,7 @@ const OrderTracking = () => {
         if (res.data.status !== lastStatus) {
           setOrder(res.data);
           setLastStatus(res.data.status);
-          toast.success(`${t('statusUpdated')} ${res.data.status}`, { duration: 3000 });
+          toast.success(`${t('orderTracking.statusUpdated')} ${t(`status.${res.data.status}`)}`, { duration: 3000 });
         }
       } catch (err) {
         console.error('Polling error:', err);
@@ -71,11 +71,11 @@ const OrderTracking = () => {
     setCancelling(true);
     try {
       await orderAPI.cancelOrder(id);
-      toast.success(t('orderCancelled'));
+      toast.success(t('orderTracking.orderCancelled'));
       fetchOrder();
       setShowCancelModal(false);
     } catch (err) {
-      toast.error(err.response?.data?.error || t('cancelFailed'));
+      toast.error(err.response?.data?.error || t('orderTracking.cancelFailed'));
     } finally {
       setCancelling(false);
     }
@@ -99,7 +99,7 @@ const OrderTracking = () => {
     <div className="min-h-screen pt-28 pb-20 bg-black/80">
       <div className="container mx-auto px-6">
         <Link to="/dashboard" className="inline-flex items-center gap-2 text-gold hover:text-yellow-400 mb-6">
-          <FiArrowLeft /> {t('backToDashboard')}
+          <FiArrowLeft /> {t('orderTracking.backToDashboard')}
         </Link>
         
         <motion.div
@@ -111,9 +111,9 @@ const OrderTracking = () => {
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 mb-6">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
-                <h1 className="text-2xl font-playfair font-bold text-gold">{t('order')} #{order.id}</h1>
+                <h1 className="text-2xl font-playfair font-bold text-gold">{t('orderTracking.order')} #{order.id}</h1>
                 <p className="text-gray-400 text-sm mt-1">
-                  {t('placedOn')} {new Date(order.created_at).toLocaleDateString()} {t('at')} {new Date(order.created_at).toLocaleTimeString()}
+                  {t('orderTracking.placedOn')} {new Date(order.created_at).toLocaleDateString()} {t('orderTracking.at')} {new Date(order.created_at).toLocaleTimeString()}
                 </p>
               </div>
               <div className="flex gap-3">
@@ -123,7 +123,7 @@ const OrderTracking = () => {
                     disabled={cancelling}
                     className="px-6 py-2 bg-red-500 text-white rounded-full font-semibold hover:bg-red-600 transition disabled:opacity-50"
                   >
-                    {t('cancelOrder')}
+                    {t('orderTracking.cancelOrder')}
                   </button>
                 )}
                 <div className={`px-4 py-2 rounded-full font-semibold ${
@@ -131,7 +131,7 @@ const OrderTracking = () => {
                   order.status === 'delivered' ? 'bg-green-500/20 text-green-400' :
                   'bg-gold/20 text-gold'
                 }`}>
-                  {order.status.toUpperCase()}
+                  {t(`status.${order.status}`, order.status.toUpperCase())}
                 </div>
               </div>
             </div>
@@ -139,7 +139,7 @@ const OrderTracking = () => {
           
           {/* Status Timeline */}
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 mb-6">
-            <h2 className="text-xl font-playfair font-bold text-gold mb-6">{t('orderStatus')}</h2>
+            <h2 className="text-xl font-playfair font-bold text-gold mb-6">{t('orderTracking.orderStatus')}</h2>
             <div className="relative">
               <div className="space-y-6 md:space-y-0 md:grid md:grid-cols-5 md:gap-4">
                 {statusFlow.map((status, idx) => {
@@ -177,7 +177,7 @@ const OrderTracking = () => {
                           {status.label}
                         </p>
                         {isActive && (
-                          <p className="text-xs text-gold mt-1 animate-pulse">{t('current')}</p>
+                          <p className="text-xs text-gold mt-1 animate-pulse">{t('orderTracking.current')}</p>
                         )}
                       </div>
                     </div>
@@ -190,7 +190,7 @@ const OrderTracking = () => {
           {/* Order Details */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6">
-              <h2 className="text-xl font-playfair font-bold text-gold mb-4">{t('orderItems')}</h2>
+              <h2 className="text-xl font-playfair font-bold text-gold mb-4">{t('orderTracking.orderItems')}</h2>
               <div className="space-y-3">
                 {order.items?.map((item, idx) => (
                   <div key={idx} className="flex justify-between items-center py-2 border-b border-white/10">
@@ -204,24 +204,24 @@ const OrderTracking = () => {
               </div>
               <div className="mt-4 pt-4 border-t border-gold/30">
                 <div className="flex justify-between">
-                  <span className="text-gray-300">{t('total')}</span>
+                  <span className="text-gray-300">{t('orderTracking.total')}</span>
                   <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(order.total_amount)}</span>
                 </div>
               </div>
             </div>
             
             <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6">
-              <h2 className="text-xl font-playfair font-bold text-gold mb-4">{t('deliveryInfo')}</h2>
+              <h2 className="text-xl font-playfair font-bold text-gold mb-4">{t('orderTracking.deliveryInfo')}</h2>
               <div className="space-y-2 text-gray-300">
-                <p><span className="text-gray-400">{t('name')}:</span> {order.customer_name}</p>
-                <p><span className="text-gray-400">{t('email')}:</span> {order.customer_email}</p>
-                <p><span className="text-gray-400">{t('phone')}:</span> {order.customer_phone}</p>
-                <p><span className="text-gray-400">{t('orderType')}:</span> {order.order_type?.replace('_', ' ').toUpperCase()}</p>
+                <p><span className="text-gray-400">{t('orderTracking.name')}:</span> {order.customer_name}</p>
+                <p><span className="text-gray-400">{t('orderTracking.email')}:</span> {order.customer_email}</p>
+                <p><span className="text-gray-400">{t('orderTracking.phone')}:</span> {order.customer_phone}</p>
+                <p><span className="text-gray-400">{t('orderTracking.orderType')}:</span> {t(`orderType.${order.order_type}`, order.order_type?.replace('_', ' ')?.toUpperCase())}</p>
                 {order.delivery_address && (
-                  <p><span className="text-gray-400">{t('address')}:</span> {order.delivery_address}</p>
+                  <p><span className="text-gray-400">{t('orderTracking.address')}:</span> {order.delivery_address}</p>
                 )}
                 {order.payment_method && (
-                  <p><span className="text-gray-400">{t('payment')}:</span> {order.payment_method.toUpperCase()}</p>
+                  <p><span className="text-gray-400">{t('orderTracking.payment')}:</span> {order.payment_method.toUpperCase()}</p>
                 )}
               </div>
             </div>
@@ -234,10 +234,10 @@ const OrderTracking = () => {
         isOpen={showCancelModal}
         onClose={() => setShowCancelModal(false)}
         onConfirm={handleCancel}
-        title={t('cancelOrderTitle')}
-        message={t('cancelOrderMessage', { orderId: order?.id })}
-        confirmText={t('yesCancel')}
-        cancelText={t('noGoBack')}
+        title={t('orderTracking.cancelOrderTitle')}
+        message={t('orderTracking.cancelOrderMessage', { orderId: order?.id })}
+        confirmText={t('orderTracking.yesCancel')}
+        cancelText={t('orderTracking.noGoBack')}
         type="danger"
       />
     </div>

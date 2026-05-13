@@ -3,11 +3,12 @@ import { Link } from 'react-router-dom';
 import { FiX, FiMinus, FiPlus, FiTrash2, FiShoppingBag } from 'react-icons/fi';
 import { getImageUrl } from '../../services/api';
 import { useCurrency } from '../../context/CurrencyContext';
-
+import { useLanguage } from '../../context/LanguageContext';
 
 const CartDrawer = ({ isOpen, onClose }) => {
   const { cart, updateQuantity, removeFromCart, total, itemCount, clearCart } = useCart();
   const { convertPrice, getSymbol } = useCurrency();
+  const { t } = useLanguage();
 
   if (!isOpen) return null;
 
@@ -16,7 +17,9 @@ const CartDrawer = ({ isOpen, onClose }) => {
       <div className="fixed inset-0 bg-black/50 z-40" onClick={onClose} />
       <div className="fixed right-0 top-0 h-full w-full max-w-md bg-black/95 backdrop-blur-xl z-50 shadow-2xl flex flex-col border-l border-white/20">
         <div className="flex justify-between items-center p-4 border-b border-gold/20">
-          <h2 className="text-xl font-playfair font-bold text-gold">Your Cart ({itemCount} items)</h2>
+          <h2 className="text-xl font-playfair font-bold text-gold">
+            {t('cart.title')} ({itemCount} {t('cart.items')})
+          </h2>
           <button onClick={onClose} className="text-white hover:text-gold transition">
             <FiX size={24} />
           </button>
@@ -26,13 +29,13 @@ const CartDrawer = ({ isOpen, onClose }) => {
           {cart.length === 0 ? (
             <div className="text-center py-12">
               <FiShoppingBag className="text-5xl text-gray-500 mx-auto mb-4" />
-              <p className="text-gray-400">Your cart is empty</p>
+              <p className="text-gray-400">{t('cart.empty')}</p>
               <Link 
                 to="/#menu" 
                 onClick={onClose}
                 className="inline-block mt-4 text-gold hover:underline"
               >
-                Browse Menu
+                {t('cart.browseMenu')}
               </Link>
             </div>
           ) : (
@@ -77,15 +80,15 @@ const CartDrawer = ({ isOpen, onClose }) => {
         {cart.length > 0 && (
           <div className="p-4 border-t border-gold/20">
             <div className="flex justify-between mb-4">
-              <span className="font-semibold text-white">Subtotal:</span>
+              <span className="font-semibold text-white">{t('cart.subtotal')}:</span>
               <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(total)}</span>
             </div>
             <div className="flex justify-between mb-4 text-sm text-gray-400">
-              <span>Delivery Fee:</span>
+              <span>{t('cart.deliveryFee')}:</span>
               <span>{getSymbol()}{convertPrice(2)}</span>
             </div>
             <div className="flex justify-between mb-4 pt-2 border-t border-white/10">
-              <span className="font-bold text-white">Total:</span>
+              <span className="font-bold text-white">{t('cart.total')}:</span>
               <span className="text-gold font-bold text-xl">{getSymbol()}{convertPrice(total + 2)}</span>
             </div>
             <div className="flex gap-3">
@@ -93,14 +96,14 @@ const CartDrawer = ({ isOpen, onClose }) => {
                 onClick={clearCart}
                 className="flex-1 px-4 py-2 rounded-full bg-red-500/20 text-red-400 hover:bg-red-500/30 transition"
               >
-                Clear Cart
+                {t('cart.clearCart')}
               </button>
               <Link 
                 to="/checkout" 
                 onClick={onClose}
                 className="flex-1 text-center bg-gold text-black py-2 rounded-full font-semibold hover:bg-gold-light transition"
               >
-                Checkout
+                {t('cart.checkout')}
               </Link>
             </div>
           </div>

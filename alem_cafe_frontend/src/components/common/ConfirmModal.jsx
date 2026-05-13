@@ -1,7 +1,19 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiAlertTriangle, FiX } from 'react-icons/fi';
+import { useLanguage } from '../../context/LanguageContext';
 
-const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, confirmText = 'Confirm', cancelText = 'Cancel', type = 'danger' }) => {
+const ConfirmModal = ({ 
+  isOpen, 
+  onClose, 
+  onConfirm, 
+  title, 
+  message, 
+  confirmText, 
+  cancelText, 
+  type = 'danger' 
+}) => {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   const colors = {
@@ -60,12 +72,12 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, confirmText 
           
           {/* Title */}
           <h3 className="text-xl font-playfair font-bold text-white text-center mb-2">
-            {title || 'Confirm Action'}
+            {title || t('modal.confirmAction')}
           </h3>
           
           {/* Message */}
           <p className="text-gray-300 text-center mb-6">
-            {message || 'Are you sure you want to proceed?'}
+            {message || t('modal.confirmMessage')}
           </p>
           
           {/* Buttons */}
@@ -74,13 +86,13 @@ const ConfirmModal = ({ isOpen, onClose, onConfirm, title, message, confirmText 
               onClick={onClose}
               className="flex-1 px-4 py-2 rounded-full bg-white/10 text-white hover:bg-white/20 transition font-medium"
             >
-              {cancelText}
+              {cancelText || t('modal.cancel')}
             </button>
             <button
               onClick={onConfirm}
               className={`flex-1 px-4 py-2 rounded-full text-white font-semibold transition ${colorStyle.button}`}
             >
-              {confirmText}
+              {confirmText || t('modal.confirm')}
             </button>
           </div>
         </motion.div>
