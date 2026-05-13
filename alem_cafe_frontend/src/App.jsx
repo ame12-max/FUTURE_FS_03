@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext';
 import { CurrencyProvider } from './context/CurrencyContext';
 import { FavoritesProvider } from './context/FavoritesContext'; 
 import { LanguageProvider } from './context/LanguageContext';
+import ChatWidget from './components/Chat';  // Import from index.js
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
 import Home from './pages/Home';
@@ -22,6 +23,8 @@ import MenuManagement from './pages/Admin/MenuManagement';
 import OrderManagement from './pages/Admin/OrderManagement';
 import Favorites from './pages/Favorites';
 import AccountManagement from './pages/AccountManagement';
+import ReservationManagement from './pages/Admin/ReservationManagement';
+
 
 
 function App() {
@@ -55,12 +58,15 @@ function App() {
                 <Route path="/full-menu" element={<FullMenu />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/favorites" element={<Favorites />} />
+                <Route path="/admin/reservations" element={<ReservationManagement />} />
                 <Route path="*" element={<Home />} />
               </Routes>
               <Footer />
+              <ChatWidget />
             </div>
               </LanguageProvider>
           </FavoritesProvider>
+           
           </CurrencyProvider>
         </CartProvider>
       </AuthProvider>

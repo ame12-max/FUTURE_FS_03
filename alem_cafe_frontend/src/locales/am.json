@@ -395,21 +395,42 @@
   "guest": "እንግዳ"
 },
 "reservation": {
-  "title": "ጠረጴዛ ይያዙ",
-  "subtitle": "በአለም ካፌ ጠረጴዛ ይያዙ",
-  "name": "ሙሉ ስም",
-  "email": "ኢሜል አድራሻ",
-  "phone": "ስልክ ቁጥር",
-  "guests": "የእንግዶች ብዛት",
-  "date": "ቀን",
-  "time": "ሰዓት",
-  "specialRequests": "ልዩ ጥያቄዎች",
-  "requestsPlaceholder": "ማንኛውም ልዩ ጥያቄ (አለርጂ፣ ክብረ በዓላት፣ ወዘተ)",
-  "submit": "አሁን ይያዙ",
-  "submitting": "በማስያዝ ላይ...",
-  "successTitle": "ቦታ ተረጋግጧል!",
-  "successMessage": "ጠረጴዛዎ ተይዟል። የማረጋገጫ ኢሜል ልከናል።",
-  "footerNote": "በቅርቡ የማረጋገጫ ኢሜል ይደርስዎታል።",
-  "error": "ቦታ ማስያዝ አልተሳካም። እባክዎ እንደገና ይሞክሩ።"
+  "adminTitle": "የቦታ ማስያዣ አስተዳደር",
+  "total": "ጠቅላላ",
+  "searchPlaceholder": "በስም፣ ኢሜል፣ ስልክ ወይም መታወቂያ ይፈልጉ...",
+  "noReservations": "ምንም የቦታ ማስያዣዎች አልተገኙም",
+  "customerInfo": "የደንበኛ መረጃ",
+  "bookingInfo": "የቦታ ማስያዣ መረጃ",
+  "guest": "እንግዳ",
+  "guests": "እንግዶች",
+  "noRequests": "ምንም ልዩ ጥያቄ የለም",
+  "fetchError": "የቦታ ማስያዣዎችን መጫን አልተሳካም",
+  "statusUpdated": "የቦታ ማስያዣ ሁኔታ ተዘምኗል",
+  "updateError": "ሁኔታ ማዘመን አልተሳካም",
+  "cancel": "ሰርዝ",
+  "markAsConfirmed": "አረጋግጥ",
+  "markAsCompleted": "አጠናቅቅ",
+  "status": {
+    "pending": "በመጠባበቅ ላይ",
+    "confirmed": "ተረጋግጧል",
+    "completed": "ተጠናቋል",
+    "cancelled": "ተሰርዟል"
+  }
+},
+"common": {
+  "refresh": "አድስ"
+},
+"chat": {
+  "startConversation": "ከድጋፍ ቡድናችን ጋር ውይይት ይጀምሩ",
+  "typeMessage": "መልዕክት ይጻፉ...",
+  "send": "ላክ",
+  "you": "እርስዎ",
+  "conversations": "ውይይቶች",
+  "noConversations": "እስካሁን ምንም ውይይት የለም",
+  "selectConversation": "ውይይት ለመጀመር ይምረጡ",
+  "noMessages": "እስካሁን መልዕክት የለም። መጻፍ ይጀምሩ!",
+  "newMessage": "አዲስ መልዕክት ከ",
+  "alemSupport": "አለም ካเฟ ድጋፍ",
+  "welcome": "እንኳን ደህና መጡ አለም ካเฟ ድጋፍ! እንዴት ማድረግ ይችላሉ?"
 }
 }

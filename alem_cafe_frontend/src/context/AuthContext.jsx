@@ -8,6 +8,7 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState(localStorage.getItem('token'));
 
+
   useEffect(() => {
     if (token) {
       authAPI.getMe()
@@ -77,19 +78,20 @@ const getMe = async () => {
   };
 
   return (
-    <AuthContext.Provider value={{ 
-      user, 
-      loading, 
-      login, 
-      register, 
-      logout, 
-      updateUser,
-      getMe,
-      isAdmin: user?.role === 'admin' || user?.role === 'manager' 
-    }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  <AuthContext.Provider value={{ 
+    user, 
+    loading,        // ← Make sure this is exported
+    token,
+    login, 
+    register, 
+    logout, 
+    updateUser,
+    getMe,
+    isAdmin: user?.role === 'admin' || user?.role === 'manager' 
+  }}>
+    {children}
+  </AuthContext.Provider>
+);
 };
 
 export const useAuth = () => useContext(AuthContext);
