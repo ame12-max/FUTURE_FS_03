@@ -1,3 +1,4 @@
+// controllers/authController.js
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -25,7 +26,6 @@ exports.register = async (req, res) => {
       return res.status(400).json({ message: 'Email already registered' });
     }
     
-    // Only allow 'user' role via registration (admin/manager must be created manually)
     const userRole = role === 'admin' || role === 'manager' ? 'user' : (role || 'user');
     const userId = await User.create(name, email, password, userRole);
     const user = await User.findById(userId);
@@ -34,7 +34,14 @@ exports.register = async (req, res) => {
     res.status(201).json({
       message: 'Registration successful',
       token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role }
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        preferred_currency: user.preferred_currency || 'ETB',
+        preferred_language: user.preferred_language || 'en'
+      }
     });
   } catch (err) {
     console.error(err);
@@ -65,7 +72,14 @@ exports.login = async (req, res) => {
     res.json({
       message: 'Login successful',
       token,
-      user: { id: user.id, name: user.name, email: user.email, role: user.role }
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        preferred_currency: user.preferred_currency || 'ETB',
+        preferred_language: user.preferred_language || 'en'
+      }
     });
   } catch (err) {
     console.error(err);
@@ -77,9 +91,20 @@ exports.login = async (req, res) => {
 exports.getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    res.json(user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      preferred_currency: user.preferred_currency || 'ETB',
+      preferred_language: user.preferred_language || 'en',
+      created_at: user.created_at
+    });
   } catch (err) {
+    console.error('GetMe error:', err);
     res.status(500).json({ message: 'Server error' });
   }
 };
