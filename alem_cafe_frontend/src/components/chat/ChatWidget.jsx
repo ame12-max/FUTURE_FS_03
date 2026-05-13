@@ -5,12 +5,10 @@ import { useAuth } from '../../context/AuthContext';
 import { ChatProvider, useChat } from '../../context/ChatContext';
 import CustomerChat from './CustomerChat';
 import AdminChat from './AdminChat';
-import { useLanguage } from '../../context/LanguageContext';
 
 const ChatContent = () => {
   const { isConnected, connectionError } = useChat();
   const { user } = useAuth();
-  const { t } = useLanguage();
 
   if (connectionError) {
     return (
@@ -69,7 +67,7 @@ const ChatWidget = () => {
             className="fixed bottom-24 right-6 z-50 w-96 h-[500px] bg-black/95 backdrop-blur-xl rounded-2xl border border-gold/30 shadow-2xl overflow-hidden flex flex-col"
           >
             <div className="flex justify-between items-center p-4 border-b border-gold/20 bg-gold/10">
-              <h3 className="text-gold font-playfair font-bold"> {t('chat.conversations')}</h3>  
+              <h3 className="text-gold font-playfair font-bold"> Alem Cafe Chat</h3>  
               <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
                 <FiX size={20} />
               </button>
