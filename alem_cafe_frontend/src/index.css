@@ -1,6 +1,8 @@
+/* Font imports - must be at the top */
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
+
 @import "tailwindcss";
 
-/* stylelint-disable-next-line at-rule-no-unknown */
 @theme {
   --color-dark: #0A0A0A;
   --color-brown: #3E2723;
@@ -25,8 +27,6 @@
 }
 
 @layer base {
-  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap');
-  
   html {
     scroll-behavior: smooth;
   }
