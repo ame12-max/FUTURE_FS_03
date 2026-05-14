@@ -34,7 +34,7 @@ const ChatContent = () => {
   return user?.role === 'admin' || user?.role === 'manager' ? <AdminChat /> : <CustomerChat />;
 };
 
-// Inner component to access chat context for badge count
+// Component to get unread count from context
 const ChatButtonWithBadge = ({ onClick, isOpen }) => {
   const { unreadCount } = useChat();
   const [isMobile, setIsMobile] = useState(false);
@@ -58,7 +58,7 @@ const ChatButtonWithBadge = ({ onClick, isOpen }) => {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-gold text-black p-3 sm:p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
+      className="fixed bottom-6 right-6 z-40 bg-gold text-black p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
     >
       <FiMessageCircle size={isMobile ? 20 : 24} />
       {showBadge && (
@@ -73,22 +73,12 @@ const ChatButtonWithBadge = ({ onClick, isOpen }) => {
 const ChatWidget = () => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
   
   if (!user) return null;
   
   return (
     <>
-      {/* Chat Button with Badge - Right side */}
+      {/* Chat Button with Badge - Always on right side */}
       <ChatProvider>
         <ChatButtonWithBadge onClick={() => setIsOpen(true)} isOpen={isOpen} />
       </ChatProvider>
@@ -101,19 +91,12 @@ const ChatWidget = () => {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className={`fixed z-50 bg-black/95 backdrop-blur-xl rounded-2xl border border-gold/30 shadow-2xl overflow-hidden flex flex-col
-              ${isMobile 
-                ? 'inset-0 rounded-none w-full h-full bottom-0 right-0' 
-                : 'bottom-24 right-6 w-96 h-[500px]'
-              }`}
+            className="fixed bottom-24 right-6 z-50 w-96 h-[500px] bg-black/95 backdrop-blur-xl rounded-2xl border border-gold/30 shadow-2xl overflow-hidden flex flex-col"
           >
             <div className="flex justify-between items-center p-4 border-b border-gold/20 bg-gold/10">
               <h3 className="text-gold font-playfair font-bold">Alem Cafe Support</h3>
-              <button 
-                onClick={() => setIsOpen(false)} 
-                className="text-gray-400 hover:text-white transition-colors p-1"
-              >
-                <FiX size={isMobile ? 24 : 20} />
+              <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
+                <FiX size={20} />
               </button>
             </div>
             
