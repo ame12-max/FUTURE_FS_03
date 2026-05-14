@@ -48,7 +48,6 @@ const ChatButtonWithBadge = ({ onClick, isOpen }) => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
   
-  // Don't show badge when chat is open
   const showBadge = unreadCount > 0 && !isOpen;
   
   return (
@@ -58,7 +57,8 @@ const ChatButtonWithBadge = ({ onClick, isOpen }) => {
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 bg-gold text-black p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
+      style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999 }}
+      className="bg-gold text-black p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
     >
       <FiMessageCircle size={isMobile ? 20 : 24} />
       {showBadge && (
@@ -78,12 +78,10 @@ const ChatWidget = () => {
   
   return (
     <>
-      {/* Chat Button with Badge - Always on right side */}
       <ChatProvider>
         <ChatButtonWithBadge onClick={() => setIsOpen(true)} isOpen={isOpen} />
       </ChatProvider>
       
-      {/* Chat Modal */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
