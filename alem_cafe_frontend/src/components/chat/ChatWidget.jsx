@@ -44,7 +44,7 @@ const ChatButtonWithBadge = ({ onClick, isOpen }) => {
     const checkMobile = () => {
       const w = window.innerWidth;
       setIsMobile(w < 768);
-      setIsTiny(w < 280);
+      setIsTiny(w <= 400);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -93,7 +93,7 @@ const ChatWidget = () => {
 
   if (!user) return null;
 
-  const isTiny = windowWidth < 280;
+  const isTiny = windowWidth <= 400;
 
   // On very narrow screens, expand to fill the viewport with small margins
   const panelStyle = isTiny
