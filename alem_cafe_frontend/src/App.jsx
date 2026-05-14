@@ -5,7 +5,7 @@ import { CartProvider } from './context/CartContext';
 import { CurrencyProvider } from './context/CurrencyContext';
 import { FavoritesProvider } from './context/FavoritesContext'; 
 import { LanguageProvider } from './context/LanguageContext';
-import ChatWidget from './components/Chat';  // Import from index.js
+import ChatWidget from './components/chat/index.js';  // Import from index.js
 import Navbar from './components/Layout/Navbar';
 import Footer from './components/Layout/Footer';
 import Home from './pages/Home';
