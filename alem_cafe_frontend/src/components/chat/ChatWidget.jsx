@@ -35,8 +35,21 @@ const ChatContent = () => {
 };
 
 // Inner component to access chat context for badge count
-const ChatButtonWithBadge = ({ onClick }) => {
+const ChatButtonWithBadge = ({ onClick, isOpen }) => {
   const { unreadCount } = useChat();
+  const [isMobile, setIsMobile] = useState(false);
+  
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  // Don't show badge when chat is open
+  const showBadge = unreadCount > 0 && !isOpen;
   
   return (
     <motion.button
@@ -47,9 +60,9 @@ const ChatButtonWithBadge = ({ onClick }) => {
       onClick={onClick}
       className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-gold text-black p-3 sm:p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
     >
-      <FiMessageCircle size={window.innerWidth < 768 ? 20 : 24} />
-      {unreadCount > 0 && (
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+      <FiMessageCircle size={isMobile ? 20 : 24} />
+      {showBadge && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center animate-pulse">
           {unreadCount > 9 ? '9+' : unreadCount}
         </span>
       )}
@@ -75,9 +88,9 @@ const ChatWidget = () => {
   
   return (
     <>
-      {/* Chat Button with Badge - Wrapped with ChatProvider to access unreadCount */}
+      {/* Chat Button with Badge - Right side */}
       <ChatProvider>
-        <ChatButtonWithBadge onClick={() => setIsOpen(true)} />
+        <ChatButtonWithBadge onClick={() => setIsOpen(true)} isOpen={isOpen} />
       </ChatProvider>
       
       {/* Chat Modal */}
