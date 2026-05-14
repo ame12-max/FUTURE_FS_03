@@ -29,12 +29,14 @@ const CustomerChat = () => {
     }
   }, [conversations]);
   
-  // Auto-focus input on mobile when keyboard opens
+  // Auto-focus input on mobile - removed isOpen reference
   useEffect(() => {
-    if (isMobile && isOpen) {
-      inputRef.current?.focus();
+    if (isMobile) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
     }
-  }, [isMobile, isOpen]);
+  }, [isMobile]);
   
   const handleSend = () => {
     if (input.trim()) {
@@ -63,7 +65,6 @@ const CustomerChat = () => {
   
   return (
     <div className="flex flex-col h-full">
-      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
         {messages.length === 0 ? (
           <div className="text-center text-gray-400 py-8">
@@ -96,7 +97,6 @@ const CustomerChat = () => {
         <div ref={messagesEndRef} />
       </div>
       
-      {/* Input Area */}
       <div className="p-3 sm:p-4 border-t border-white/10 bg-black/50">
         <div className="flex gap-2">
           <input
