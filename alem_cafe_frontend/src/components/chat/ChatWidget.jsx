@@ -34,6 +34,29 @@ const ChatContent = () => {
   return user?.role === 'admin' || user?.role === 'manager' ? <AdminChat /> : <CustomerChat />;
 };
 
+// Inner component to access chat context for badge count
+const ChatButtonWithBadge = ({ onClick }) => {
+  const { unreadCount } = useChat();
+  
+  return (
+    <motion.button
+      initial={{ scale: 0 }}
+      animate={{ scale: 1 }}
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={onClick}
+      className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-gold text-black p-3 sm:p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
+    >
+      <FiMessageCircle size={window.innerWidth < 768 ? 20 : 24} />
+      {unreadCount > 0 && (
+        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center animate-pulse">
+          {unreadCount > 9 ? '9+' : unreadCount}
+        </span>
+      )}
+    </motion.button>
+  );
+};
+
 const ChatWidget = () => {
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
@@ -52,17 +75,10 @@ const ChatWidget = () => {
   
   return (
     <>
-      {/* Chat Button */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-40 bg-gold text-black p-3 sm:p-4 rounded-full shadow-lg hover:shadow-xl transition-all"
-      >
-        <FiMessageCircle size={isMobile ? 20 : 24} />
-      </motion.button>
+      {/* Chat Button with Badge - Wrapped with ChatProvider to access unreadCount */}
+      <ChatProvider>
+        <ChatButtonWithBadge onClick={() => setIsOpen(true)} />
+      </ChatProvider>
       
       {/* Chat Modal */}
       <AnimatePresence>
@@ -78,7 +94,6 @@ const ChatWidget = () => {
                 : 'bottom-24 right-6 w-96 h-[500px]'
               }`}
           >
-            {/* Header */}
             <div className="flex justify-between items-center p-4 border-b border-gold/20 bg-gold/10">
               <h3 className="text-gold font-playfair font-bold">Alem Cafe Support</h3>
               <button 
@@ -89,7 +104,6 @@ const ChatWidget = () => {
               </button>
             </div>
             
-            {/* Chat Content */}
             <div className="flex-1 overflow-y-auto">
               <ChatProvider>
                 <ChatContent />
