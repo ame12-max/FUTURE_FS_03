@@ -1,24 +1,56 @@
-// src/components/Chat/ChatWidget.jsx
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FiMessageCircle, FiX } from 'react-icons/fi';
-import { useAuth } from '../../context/AuthContext';
-import { ChatProvider, useChat } from '../../context/ChatContext';
-import CustomerChat from './CustomerChat';
-import AdminChat from './AdminChat';
+// src/components/Chat/CustomerChat.jsx
+import { useState, useEffect, useRef } from 'react';
+import { useChat } from '../../context/ChatContext';
 
-const ChatContent = () => {
-  const { isConnected, connectionError } = useChat();
-  const { user } = useAuth();
+const CustomerChat = () => {
+  const { messages, sendMessage, activeConversation, conversations, loadConversation, messagesEndRef, isConnected, socket } = useChat();
+  const [input, setInput] = useState('');
+  const [isMobile, setIsMobile] = useState(false);
+  const inputRef = useRef(null);
   
-  if (connectionError) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full text-gray-400 p-4 text-center">
-        <p className="text-sm">Connection error</p>
-        <p className="text-xs mt-1">{connectionError}</p>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+  
+  useEffect(() => {
+    if (socket && isConnected) {
+      socket.emit('get-conversations');
+    }
+  }, [socket, isConnected]);
+  
+  useEffect(() => {
+    if (conversations && conversations.length > 0 && !activeConversation) {
+      loadConversation(conversations[0]);
+    }
+  }, [conversations]);
+  
+  // Auto-focus input on mobile when chat opens
+  useEffect(() => {
+    if (isMobile) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [isMobile]);
+  
+  const handleSend = () => {
+    if (input.trim()) {
+      sendMessage(input, activeConversation?.id, null);
+      setInput('');
+    }
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
+  };
   
   if (!isConnected) {
     return (
@@ -31,83 +63,63 @@ const ChatContent = () => {
     );
   }
   
-  return user?.role === 'admin' || user?.role === 'manager' ? <AdminChat /> : <CustomerChat />;
-};
-
-// Component to get unread count from context
-const ChatButtonWithBadge = ({ onClick, isOpen }) => {
-  const { unreadCount } = useChat();
-  const [isMobile, setIsMobile] = useState(false);
-  
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
-  const showBadge = unreadCount > 0 && !isOpen;
-  
   return (
-    <motion.button
-      initial={{ scale: 0 }}
-      animate={{ scale: 1 }}
-      whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      onClick={onClick}
-      style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 9999 }}
-      className="bg-gold text-black p-4 rounded-full shadow-lg hover:shadow-xl transition-all relative"
-    >
-      <FiMessageCircle size={isMobile ? 20 : 24} />
-      {showBadge && (
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full min-w-[20px] h-5 px-1 flex items-center justify-center animate-pulse">
-          {unreadCount > 9 ? '9+' : unreadCount}
-        </span>
-      )}
-    </motion.button>
-  );
-};
-
-const ChatWidget = () => {
-  const { user } = useAuth();
-  const [isOpen, setIsOpen] = useState(false);
-  
-  if (!user) return null;
-  
-  return (
-    <>
-      <ChatProvider>
-        <ChatButtonWithBadge onClick={() => setIsOpen(true)} isOpen={isOpen} />
-      </ChatProvider>
-      
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-            className="fixed bottom-24 right-6 z-50 w-96 h-[500px] bg-black/95 backdrop-blur-xl rounded-2xl border border-gold/30 shadow-2xl overflow-hidden flex flex-col"
-          >
-            <div className="flex justify-between items-center p-4 border-b border-gold/20 bg-gold/10">
-              <h3 className="text-gold font-playfair font-bold">Alem Cafe Support</h3>
-              <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
-                <FiX size={20} />
-              </button>
+    <div className="flex flex-col h-full">
+      {/* Messages Area */}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
+        {messages.length === 0 ? (
+          <div className="text-center text-gray-400 py-8">
+            <p>Start a conversation with our support team</p>
+          </div>
+        ) : (
+          messages.map((msg, idx) => (
+            <div
+              key={msg.id || idx}
+              className={`flex ${msg.sender_role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div
+                className={`max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-2xl ${
+                  msg.sender_role === 'user'
+                    ? 'bg-gold text-black rounded-br-sm'
+                    : 'bg-white/10 text-white rounded-bl-sm'
+                }`}
+              >
+                <p className="text-xs opacity-70 mb-1">
+                  {msg.sender_role === 'user' ? 'You' : 'Support'}
+                </p>
+                <p className="text-sm break-words">{msg.message}</p>
+                <p className="text-xs opacity-50 mt-1">
+                  {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                </p>
+              </div>
             </div>
-            
-            <div className="flex-1 overflow-y-auto">
-              <ChatProvider>
-                <ChatContent />
-              </ChatProvider>
-            </div>
-          </motion.div>
+          ))
         )}
-      </AnimatePresence>
-    </>
+        <div ref={messagesEndRef} />
+      </div>
+      
+      {/* Input Area */}
+      <div className="p-3 sm:p-4 border-t border-white/10 bg-black/50">
+        <div className="flex gap-2">
+          <input
+            ref={inputRef}
+            type="text"
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyPress={handleKeyPress}
+            placeholder="Type a message..."
+            className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition text-sm sm:text-base"
+          />
+          <button
+            onClick={handleSend}
+            className="bg-gold text-black px-4 sm:px-5 py-2 rounded-full font-semibold hover:bg-gold-light transition text-sm sm:text-base whitespace-nowrap"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
   );
 };
 
-export default ChatWidget;
+export default CustomerChat;
