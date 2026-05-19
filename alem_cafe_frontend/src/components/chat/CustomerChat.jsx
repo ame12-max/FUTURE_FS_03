@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useChat } from '../../context/ChatContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 const CustomerChat = () => {
   const { 
@@ -13,6 +14,7 @@ const CustomerChat = () => {
     socket 
   } = useChat();
   const [input, setInput] = useState('');
+  const { t } = useLanguage();
   
   // Request conversations when chat opens
   useEffect(() => {
@@ -43,7 +45,7 @@ const CustomerChat = () => {
       <div className="flex items-center justify-center h-full text-gray-400">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold mx-auto mb-3"></div>
-          <p className="text-sm">Connecting...</p>
+          <p className="text-sm">{t('Connecting...')}</p>
         </div>
       </div>
     );
@@ -54,7 +56,7 @@ const CustomerChat = () => {
       <div className="flex-1 overflow-y-auto p-4 space-y-3">
         {messages.length === 0 ? (
           <div className="text-center text-gray-400 py-8">
-            <p>Start a conversation with our support team</p>
+            <p>{t('chat.startConversation')}</p>
           </div>
         ) : (
           messages.map((msg, idx) => (
@@ -90,14 +92,14 @@ const CustomerChat = () => {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-            placeholder="Type a message..."
+            placeholder={t('chat.typeMessage')}
             className="flex-1 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition"
           />
           <button
             onClick={handleSend}
             className="bg-gold text-black px-4 py-2 rounded-full font-semibold hover:bg-gold-light transition"
           >
-            Send
+            {t('chat.send')}
           </button>
         </div>
       </div>

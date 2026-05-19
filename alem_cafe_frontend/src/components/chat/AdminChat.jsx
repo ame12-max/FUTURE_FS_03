@@ -10,7 +10,7 @@ const AdminChat = () => {
   if (!isConnected) {
     return (
       <div className="flex items-center justify-center h-full text-gray-400">
-        Connecting to chat server...
+      {t('chat.connecting')}
       </div>
     );
   }
