@@ -1,42 +1,59 @@
-import { useState, useEffect } from 'react';
+// src/components/Chat/CustomerChat.jsx
+import { useState, useEffect, useRef } from 'react';
 import { useChat } from '../../context/ChatContext';
 import { useLanguage } from '../../context/LanguageContext';
 
 const CustomerChat = () => {
-  const { 
-    messages, 
-    sendMessage, 
-    activeConversation, 
-    conversations, 
-    loadConversation, 
-    messagesEndRef, 
-    isConnected,
-    socket 
-  } = useChat();
+  const { messages, sendMessage, activeConversation, conversations, loadConversation, messagesEndRef, isConnected, socket } = useChat();
   const [input, setInput] = useState('');
+<<<<<<< HEAD
   const { t } = useLanguage();
+=======
+  const [isMobile, setIsMobile] = useState(false);
+  const inputRef = useRef(null);
   
-  // Request conversations when chat opens
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+>>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
+  
   useEffect(() => {
     if (socket && isConnected) {
-      console.log('📡 Requesting conversations...');
       socket.emit('get-conversations');
     }
   }, [socket, isConnected]);
   
-  // Load conversation if exists and not loaded
   useEffect(() => {
     if (conversations && conversations.length > 0 && !activeConversation) {
-      console.log('🔄 Loading conversation:', conversations[0]);
       loadConversation(conversations[0]);
     }
   }, [conversations]);
   
+  // Auto-focus input on mobile - removed isOpen reference
+  useEffect(() => {
+    if (isMobile) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [isMobile]);
+  
   const handleSend = () => {
     if (input.trim()) {
-      console.log('📤 Sending message:', input);
       sendMessage(input, activeConversation?.id, null);
       setInput('');
+    }
+  };
+  
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
     }
   };
   
@@ -53,7 +70,7 @@ const CustomerChat = () => {
   
   return (
     <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-4 space-y-3">
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
         {messages.length === 0 ? (
           <div className="text-center text-gray-400 py-8">
             <p>{t('chat.startConversation')}</p>
@@ -65,7 +82,7 @@ const CustomerChat = () => {
               className={`flex ${msg.sender_role === 'user' ? 'justify-end' : 'justify-start'}`}
             >
               <div
-                className={`max-w-[70%] p-3 rounded-2xl ${
+                className={`max-w-[85%] sm:max-w-[70%] p-2 sm:p-3 rounded-2xl ${
                   msg.sender_role === 'user'
                     ? 'bg-gold text-black rounded-br-sm'
                     : 'bg-white/10 text-white rounded-bl-sm'
@@ -74,9 +91,9 @@ const CustomerChat = () => {
                 <p className="text-xs opacity-70 mb-1">
                   {msg.sender_role === 'user' ? 'You' : 'Alem Cafe Admin'}
                 </p>
-                <p className="text-sm">{msg.message}</p>
+                <p className="text-sm break-words">{msg.message}</p>
                 <p className="text-xs opacity-50 mt-1">
-                  {new Date(msg.created_at).toLocaleTimeString()}
+                  {new Date(msg.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
             </div>
@@ -85,20 +102,31 @@ const CustomerChat = () => {
         <div ref={messagesEndRef} />
       </div>
       
+<<<<<<< HEAD
       <div className="p-16 border-t border-white/10">
+=======
+      <div className="p-3 sm:p-4 border-t border-white/10 bg-black/50">
+>>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
         <div className="flex gap-2">
           <input
+            ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
+<<<<<<< HEAD
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             placeholder={t('chat.typeMessage')}
             className="flex-1 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition"
+=======
+            onKeyPress={handleKeyPress}
+            placeholder="Type a message..."
+            className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition text-sm sm:text-base"
+>>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
           />
           <br/>
           <button
             onClick={handleSend}
-            className="bg-gold text-black px-4 py-2 rounded-full font-semibold hover:bg-gold-light transition"
+            className="bg-gold text-black px-4 sm:px-5 py-2 rounded-full font-semibold hover:bg-gold-light transition text-sm sm:text-base whitespace-nowrap"
           >
             {t('chat.send')}
           </button>
