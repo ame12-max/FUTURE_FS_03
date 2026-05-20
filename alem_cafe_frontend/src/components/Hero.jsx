@@ -10,22 +10,18 @@ import {
 } from "react-icons/fa";
 import HeroImage from "../assets/hero.png";
 import { useLanguage } from "../context/LanguageContext";
+import { useState } from "react";
+import ReservationModal from "./Reservation/ReservationModal";
 
 const Hero = () => {
   const { t } = useLanguage();
+  const [reserveOpen, setReserveOpen] = useState(false);
 
   const features = [
     { icon: FaCoffee, title: t('hero.premiumCoffee') },
     { icon: FaLeaf, title: t('hero.freshIngredients') },
     { icon: FaHome, title: t('hero.cozyAmbience') },
   ];
-
-  const handleBookTable = () => {
-    const reservationSection = document.getElementById("contact");
-    if (reservationSection) {
-      reservationSection.scrollIntoView({ behavior: "smooth" });
-    }
-  };
 
   const handleExploreMenu = () => {
     const menuSection = document.getElementById("menu");
@@ -93,13 +89,14 @@ const Hero = () => {
           <div className="flex gap-3 sm:gap-4 mt-6 sm:mt-8 flex-wrap w-full">
             <button
               onClick={handleExploreMenu}
-              className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition text-sm sm:text-base whitespace-nowrap"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-yellow-500 text-black font-semibold rounded-full shadow-lg hover:scale-105 transition text-sm sm:text-base whitespace-nowrap cursor-pointer"
             >
               {t('hero.exploreMenu')}
             </button>
             <button
-              onClick={handleBookTable}
-              className="px-4 sm:px-6 py-2 sm:py-3 border border-yellow-500 text-yellow-400 rounded-full hover:bg-yellow-500/10 transition text-sm sm:text-base whitespace-nowrap"
+                 onClick={() => setReserveOpen(true)}
+
+              className="px-4 sm:px-6 py-2 sm:py-3 border border-yellow-500 text-yellow-400 rounded-full hover:bg-yellow-500/10 transition text-sm sm:text-base whitespace-nowrap cursor-pointer"
             >
               {t('hero.bookTable')}
             </button>
@@ -141,6 +138,7 @@ const Hero = () => {
           </div>
         </motion.div>
       </div>
+        <ReservationModal isOpen={reserveOpen} onClose={() => setReserveOpen(false)} />
     </section>
   );
 };

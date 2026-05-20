@@ -193,9 +193,9 @@ const Navbar = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl py-6 border-t border-white/10 shadow-xl max-h-[80vh] overflow-y-auto"
+            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl py-2 border-t border-white/10 shadow-xl max-h-[80vh] overflow-y-auto"
           >
-            <div className="flex flex-col items-center gap-4">
+            <div className="flex flex-col items-center gap-0">
               {links.map((link) => (
                 <button
                   key={link}

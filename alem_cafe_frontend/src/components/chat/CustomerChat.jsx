@@ -72,7 +72,7 @@ const CustomerChat = () => {
                 }`}
               >
                 <p className="text-xs opacity-70 mb-1">
-                  {msg.sender_role === 'user' ? 'You' : 'Support'}
+                  {msg.sender_role === 'user' ? 'You' : 'Alem Cafe Admin'}
                 </p>
                 <p className="text-sm">{msg.message}</p>
                 <p className="text-xs opacity-50 mt-1">
@@ -85,7 +85,7 @@ const CustomerChat = () => {
         <div ref={messagesEndRef} />
       </div>
       
-      <div className="p-4 border-t border-white/10">
+      <div className="p-16 border-t border-white/10">
         <div className="flex gap-2">
           <input
             type="text"
@@ -95,6 +95,7 @@ const CustomerChat = () => {
             placeholder={t('chat.typeMessage')}
             className="flex-1 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition"
           />
+          <br/>
           <button
             onClick={handleSend}
             className="bg-gold text-black px-4 py-2 rounded-full font-semibold hover:bg-gold-light transition"
