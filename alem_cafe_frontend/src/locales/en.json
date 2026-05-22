@@ -437,12 +437,8 @@
     "noMessages": "No messages yet. Start typing!",
     "newMessage": "New message from",
     "alemSupport": "Alem Cafe Support",
-<<<<<<< HEAD
     "welcome": "Welcome to Alem Cafe Support! How can we assist you today?",
       "connecting": "Connecting to chat server..."
 
-=======
-    "welcome": "Welcome to Alem Cafe Support! How can we assist you today?"
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
   }
 }

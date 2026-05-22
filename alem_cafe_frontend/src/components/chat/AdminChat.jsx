@@ -7,7 +7,6 @@ const AdminChat = () => {
   const [input, setInput] = useState('');
   const [isMobile, setIsMobile] = useState(false);
   
-<<<<<<< HEAD
   if (!isConnected) {
     return (
       <div className="flex items-center justify-center h-full text-gray-400">
@@ -15,22 +14,6 @@ const AdminChat = () => {
       </div>
     );
   }
-=======
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-  
-  useEffect(() => {
-    if (conversations.length > 0 && !activeConversation) {
-      loadConversation(conversations[0]);
-    }
-  }, [conversations]);
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
   
   const handleSend = () => {
     if (input.trim() && activeConversation) {

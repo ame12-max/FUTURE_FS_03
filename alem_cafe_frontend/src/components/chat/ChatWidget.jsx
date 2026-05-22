@@ -86,10 +86,7 @@ const ChatWidget = () => {
   const [windowWidth, setWindowWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 400
   );
-<<<<<<< HEAD
   const { t } = useLanguage();
-=======
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
 
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
@@ -135,11 +132,7 @@ const ChatWidget = () => {
             className="bg-black/95 backdrop-blur-xl rounded-2xl border border-gold/30 shadow-2xl overflow-hidden flex flex-col"
           >
             <div className="flex justify-between items-center p-4 border-b border-gold/20 bg-gold/10">
-<<<<<<< HEAD
               <h3 className="text-gold font-playfair font-bold truncate pr-2">{t('chat.alemSupport')}</h3>
-=======
-              <h3 className="text-gold font-playfair font-bold truncate pr-2">Alem Cafe Support</h3>
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
               <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white flex-shrink-0">
                 <FiX size={20} />
               </button>

@@ -6,9 +6,7 @@ import { useLanguage } from '../../context/LanguageContext';
 const CustomerChat = () => {
   const { messages, sendMessage, activeConversation, conversations, loadConversation, messagesEndRef, isConnected, socket } = useChat();
   const [input, setInput] = useState('');
-<<<<<<< HEAD
   const { t } = useLanguage();
-=======
   const [isMobile, setIsMobile] = useState(false);
   const inputRef = useRef(null);
   
@@ -20,7 +18,6 @@ const CustomerChat = () => {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
   
   useEffect(() => {
     if (socket && isConnected) {
@@ -102,26 +99,16 @@ const CustomerChat = () => {
         <div ref={messagesEndRef} />
       </div>
       
-<<<<<<< HEAD
       <div className="p-16 border-t border-white/10">
-=======
-      <div className="p-3 sm:p-4 border-t border-white/10 bg-black/50">
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
         <div className="flex gap-2">
           <input
             ref={inputRef}
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-<<<<<<< HEAD
             onKeyPress={(e) => e.key === 'Enter' && handleSend()}
             placeholder={t('chat.typeMessage')}
             className="flex-1 px-4 py-2 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition"
-=======
-            onKeyPress={handleKeyPress}
-            placeholder="Type a message..."
-            className="flex-1 px-3 sm:px-4 py-2 sm:py-2.5 rounded-full bg-white/10 border border-white/20 text-white placeholder-gray-400 focus:outline-none focus:border-gold transition text-sm sm:text-base"
->>>>>>> 25c5179db7b46624c457a54ed91f098cb4c2fcb2
           />
           <br/>
           <button
