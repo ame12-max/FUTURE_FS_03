@@ -121,7 +121,7 @@ const MenuDetail = () => {
                 "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600"
               }
               alt={item.name}
-              className="w-full h-full object-cover lg:rounded-l-3xl min-h-[300px] lg:min-h-[500px]"
+              className="w-full h-[300px] object-cover lg:rounded-l-3xl min-h-[300px] lg:min-h-[500px]"
             />
 
             {/* Details */}
