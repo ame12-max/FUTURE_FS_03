@@ -43,7 +43,6 @@ const Navbar = () => {
   // Icons for bottom navigation
   const bottomNavItems = [
     { name: "Home", icon: FiHome, href: "home" },
-    { name: "Menu", icon: FiList, href: "menu" },
   ];
 
   const handleNavClick = (link) => {
@@ -377,6 +376,17 @@ const Navbar = () => {
             );
           })}
           {/* Cart Button in Bottom Nav */}
+          {/* full menu page icon */}
+          <button
+            onClick={() => {
+              navigate("/full-menu");
+            }}
+            className="flex flex-col items-center gap-1 text-gray-400 hover:text-gold transition py-1 px-3 rounded-lg"
+          >
+            <FiList size={20} />
+            <span className="text-[10px]">{t("nav.menu")}</span>
+          </button>
+          
           <button
             onClick={() => setCartOpen(true)}
             className="flex flex-col items-center gap-1 text-gray-400 hover:text-gold transition py-1 px-3 rounded-lg relative"
@@ -389,6 +399,7 @@ const Navbar = () => {
               </span>
             )}
           </button>
+          
           {/* User/Login Button in Bottom Nav */}
           {user ? (
             <button
