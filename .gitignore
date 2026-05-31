@@ -43,3 +43,4 @@ alem_cafe_backend/.env.development.local
 alem_cafe_backend/.env.test.local
 alem_cafe_backend/.env.production.local
 alem_cafe_backend/.env  
+npm-cache/

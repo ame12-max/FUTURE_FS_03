@@ -2,6 +2,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef, useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FiHeart, FiPlus } from "react-icons/fi";
+import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { menuAPI, getImageUrl } from "../services/api";
 import { useCart } from "../context/CartContext";
@@ -12,6 +13,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 const MenuSection = () => {
   const ref = useRef(null);
+  const nagate = useNavigate();
   const isInView = useInView(ref, { once: true, threshold: 0.2 });
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -46,9 +48,9 @@ const MenuSection = () => {
       image: getImageUrl(item.image_url) || "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600",
     };
 
-    addToCart(cartItem, 1);
 
     if (user) {
+        addToCart(cartItem, 1);
       toast.success(`${item.name} ${t('menu.addedToCart')}`, {
         duration: 2000,
         position: "bottom-center",
@@ -58,6 +60,7 @@ const MenuSection = () => {
         duration: 3000,
         position: "bottom-center",
       });
+      nagate('/login');
     }
   };
 

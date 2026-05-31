@@ -3,6 +3,11 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+const { OAuth2Client } = require('google-auth-library');
+
+// Initialize Google OAuth client (ONLY with client ID, no secret needed)
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
 // Generate JWT token
 const generateToken = (user) => {
   return jwt.sign(
@@ -101,10 +106,69 @@ exports.getMe = async (req, res) => {
       role: user.role,
       preferred_currency: user.preferred_currency || 'ETB',
       preferred_language: user.preferred_language || 'en',
-      created_at: user.created_at
+      created_at: user.created_at,
+      picture: user.picture || null,
     });
   } catch (err) {
     console.error('GetMe error:', err);
     res.status(500).json({ message: 'Server error' });
+  }
+};
+
+exports.googleLogin = async (req, res) => {
+  const { credential } = req.body;
+  
+  if (!credential) {
+    return res.status(400).json({ message: 'Credential token required' });
+  }
+  
+  try {
+    // Verify Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;  // ✅ Get picture from Google
+    
+    console.log('Google user data:', { email, name, picture }); // Debug log
+    
+    // Check if user exists
+    let user = await User.findByEmail(email);
+    
+    if (!user) {
+      // Create new user with picture
+      const userId = await User.create(
+        name || email.split('@')[0],
+        email,
+        Math.random().toString(36).slice(-12),
+        'user',
+        picture  // ✅ Pass picture to create function
+      );
+      user = await User.findById(userId);
+    } else {
+      // Update existing user's picture if changed (optional)
+      await User.updatePicture(user.id, picture);
+    }
+    
+    const token = generateToken(user);
+    
+    res.json({
+      message: 'Login successful',
+      token,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        picture: picture || user.picture || null,  // ✅ Return picture
+        preferred_currency: user.preferred_currency || 'ETB',
+        preferred_language: user.preferred_language || 'en'
+      }
+    });
+  } catch (err) {
+    console.error('Google login error:', err);
+    res.status(500).json({ message: 'Server error during Google authentication' });
   }
 };

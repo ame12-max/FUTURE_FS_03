@@ -1,7 +1,19 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMenu, FiX, FiShoppingCart, FiUser, FiHeart, FiCalendar } from "react-icons/fi";
+import {
+  FiMenu,
+  FiX,
+  FiShoppingCart,
+  FiUser,
+  FiHeart,
+  FiCalendar,
+  FiHome,
+  FiList,
+  FiInfo,
+  FiImage,
+  FiMail,
+} from "react-icons/fi";
 import { useAuth } from "../../context/AuthContext";
 import { useCart } from "../../context/CartContext";
 import { useLanguage } from "../../context/LanguageContext";
@@ -28,6 +40,12 @@ const Navbar = () => {
 
   const links = ["Home", "Menu", "About", "Gallery", "Contact"];
 
+  // Icons for bottom navigation
+  const bottomNavItems = [
+    { name: "Home", icon: FiHome, href: "home" },
+    { name: "Menu", icon: FiList, href: "menu" },
+  ];
+
   const handleNavClick = (link) => {
     if (link === "Home") {
       if (isHomePage) {
@@ -49,6 +67,26 @@ const Navbar = () => {
     setIsOpen(false);
   };
 
+  const handleBottomNavClick = (item) => {
+    if (item.name === "Home") {
+      if (isHomePage) {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      } else {
+        navigate("/");
+      }
+    } else {
+      const sectionId = item.href;
+      if (isHomePage) {
+        const element = document.getElementById(sectionId);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      } else {
+        navigate(`/#${sectionId}`);
+      }
+    }
+  };
+
   return (
     <>
       <nav
@@ -64,7 +102,7 @@ const Navbar = () => {
             to="/"
             className="text-xl sm:text-2xl md:text-3xl font-playfair font-bold text-gold tracking-wide hover:scale-105 transition-transform duration-300"
           >
-            {t('nav.alemCafe')}
+            {t("nav.alemCafe")}
           </Link>
 
           {/* Desktop Menu */}
@@ -79,14 +117,14 @@ const Navbar = () => {
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gold transition-all duration-300 group-hover:w-full"></span>
               </button>
             ))}
-            
+
             {/* Reserve Button */}
             <button
               onClick={() => setReserveOpen(true)}
               className="bg-gold/20 hover:bg-gold/30 text-gold px-4 py-2 rounded-full text-sm font-semibold transition flex items-center gap-2"
             >
               <FiCalendar size={16} />
-              {t('nav.reserveTable')}
+              {t("nav.reserveTable")}
             </button>
 
             {/* Cart */}
@@ -105,17 +143,21 @@ const Navbar = () => {
             {/* Language Switcher */}
             <div className="flex gap-1 bg-white/10 rounded-full p-1">
               <button
-                onClick={() => language !== 'en' && toggleLanguage()}
+                onClick={() => language !== "en" && toggleLanguage()}
                 className={`px-3 py-1 rounded-full text-sm transition ${
-                  language === 'en' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                  language === "en"
+                    ? "bg-gold text-black"
+                    : "text-white hover:text-gold"
                 }`}
               >
                 EN
               </button>
               <button
-                onClick={() => language !== 'am' && toggleLanguage()}
+                onClick={() => language !== "am" && toggleLanguage()}
                 className={`px-3 py-1 rounded-full text-sm transition ${
-                  language === 'am' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                  language === "am"
+                    ? "bg-gold text-black"
+                    : "text-white hover:text-gold"
                 }`}
               >
                 አማ
@@ -126,7 +168,15 @@ const Navbar = () => {
             {user ? (
               <div className="relative group">
                 <button className="flex items-center gap-2 text-white hover:text-gold transition px-3 py-2 rounded-full hover:bg-white/10">
-                  <FiUser size={18} />
+                  {user.picture ? (
+                    <img
+                      src={user.picture}
+                      alt={user.name}
+                      className="w-6 h-6 rounded-full object-cover border border-gold/30"
+                    />
+                  ) : (
+                    <FiUser size={18} />
+                  )}
                   <span className="text-sm">{user.name.split(" ")[0]}</span>
                 </button>
                 <div className="absolute right-0 mt-2 w-56 bg-black/90 backdrop-blur-xl rounded-xl overflow-hidden hidden group-hover:block border border-white/10 shadow-xl">
@@ -135,21 +185,21 @@ const Navbar = () => {
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                   >
                     <FiUser size={16} />
-                    {t('nav.myOrders')}
+                    {t("nav.myOrders")}
                   </Link>
                   <Link
                     to="/favorites"
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                   >
                     <FiHeart size={16} />
-                    {t('nav.favorites')}
+                    {t("nav.favorites")}
                   </Link>
                   <Link
                     to="/account"
                     className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                   >
                     <FiUser size={16} />
-                    {t('nav.accountSettings')}
+                    {t("nav.accountSettings")}
                   </Link>
                   {isAdmin && (
                     <Link
@@ -157,14 +207,14 @@ const Navbar = () => {
                       className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 transition text-sm"
                     >
                       <FiUser size={16} />
-                      {t('nav.adminPanel')}
+                      {t("nav.adminPanel")}
                     </Link>
                   )}
                   <button
                     onClick={logout}
                     className="w-full text-left px-4 py-3 text-red-400 hover:bg-white/10 transition text-sm"
                   >
-                    {t('nav.logout')}
+                    {t("nav.logout")}
                   </button>
                 </div>
               </div>
@@ -173,12 +223,12 @@ const Navbar = () => {
                 to="/login"
                 className="text-white hover:text-gold transition px-4 py-2 rounded-full hover:bg-white/10 text-sm"
               >
-                {t('nav.login')}
+                {t("nav.login")}
               </Link>
             )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button (Hamburger) */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden text-white text-2xl p-2 rounded-lg hover:bg-white/10 transition"
@@ -187,15 +237,15 @@ const Navbar = () => {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu (Dropdown from hamburger) */}
         {isOpen && (
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl py-2 border-t border-white/10 shadow-xl max-h-[80vh] overflow-y-auto"
+            className="md:hidden absolute top-full left-0 w-full bg-black/95 backdrop-blur-xl py-4 border-t border-white/10 shadow-xl max-h-[80vh] overflow-y-auto"
           >
-            <div className="flex flex-col items-center gap-0">
+            <div className="flex flex-col items-center gap-3">
               {links.map((link) => (
                 <button
                   key={link}
@@ -205,8 +255,8 @@ const Navbar = () => {
                   {t(`nav.${link.toLowerCase()}`)}
                 </button>
               ))}
-              
-              {/* Reserve Button - Mobile */}
+
+              {/* Reserve Button */}
               <button
                 onClick={() => {
                   setReserveOpen(true);
@@ -215,10 +265,10 @@ const Navbar = () => {
                 className="bg-gold/20 hover:bg-gold/30 text-gold px-6 py-2 rounded-full text-base font-semibold transition flex items-center gap-2"
               >
                 <FiCalendar size={18} />
-                {t('nav.reserveTable')}
+                {t("nav.reserveTable")}
               </button>
 
-              {/* Cart - Mobile */}
+              {/* Cart */}
               <button
                 onClick={() => {
                   setCartOpen(true);
@@ -227,29 +277,33 @@ const Navbar = () => {
                 className="flex items-center gap-2 text-white hover:text-gold text-lg py-2 transition"
               >
                 <FiShoppingCart size={18} />
-                {t('nav.cart')} ({itemCount > 9 ? "9+" : itemCount})
+                {t("nav.cart")} ({itemCount > 9 ? "9+" : itemCount})
               </button>
-              
-              {/* Language Switcher - Mobile */}
+
+              {/* Language Switcher */}
               <div className="flex gap-3 py-2">
                 <button
-                  onClick={() => language !== 'en' && toggleLanguage()}
+                  onClick={() => language !== "en" && toggleLanguage()}
                   className={`px-4 py-2 rounded-lg text-sm transition ${
-                    language === 'en' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                    language === "en"
+                      ? "bg-gold text-black"
+                      : "text-white hover:text-gold"
                   }`}
                 >
                   English
                 </button>
                 <button
-                  onClick={() => language !== 'am' && toggleLanguage()}
+                  onClick={() => language !== "am" && toggleLanguage()}
                   className={`px-4 py-2 rounded-lg text-sm transition ${
-                    language === 'am' ? 'bg-gold text-black' : 'text-white hover:text-gold'
+                    language === "am"
+                      ? "bg-gold text-black"
+                      : "text-white hover:text-gold"
                   }`}
                 >
                   አማርኛ
                 </button>
               </div>
-              
+
               {user ? (
                 <>
                   <Link
@@ -257,21 +311,21 @@ const Navbar = () => {
                     onClick={() => setIsOpen(false)}
                     className="text-white hover:text-gold text-lg py-2 transition"
                   >
-                    {t('nav.myOrders')}
+                    {t("nav.myOrders")}
                   </Link>
                   <Link
                     to="/favorites"
                     onClick={() => setIsOpen(false)}
                     className="text-white hover:text-gold text-lg py-2 transition"
                   >
-                    {t('nav.favorites')}
+                    {t("nav.favorites")}
                   </Link>
                   <Link
                     to="/account"
                     onClick={() => setIsOpen(false)}
                     className="text-white hover:text-gold text-lg py-2 transition"
                   >
-                    {t('nav.accountSettings')}
+                    {t("nav.accountSettings")}
                   </Link>
                   {isAdmin && (
                     <Link
@@ -279,7 +333,7 @@ const Navbar = () => {
                       onClick={() => setIsOpen(false)}
                       className="text-white hover:text-gold text-lg py-2 transition"
                     >
-                      {t('nav.adminPanel')}
+                      {t("nav.adminPanel")}
                     </Link>
                   )}
                   <button
@@ -289,7 +343,7 @@ const Navbar = () => {
                     }}
                     className="text-red-400 hover:text-red-300 text-lg py-2 transition"
                   >
-                    {t('nav.logout')}
+                    {t("nav.logout")}
                   </button>
                 </>
               ) : (
@@ -298,15 +352,89 @@ const Navbar = () => {
                   onClick={() => setIsOpen(false)}
                   className="text-white hover:text-gold text-lg py-2 transition"
                 >
-                  {t('nav.login')}
+                  {t("nav.login")}
                 </Link>
               )}
             </div>
           </motion.div>
         )}
       </nav>
+
+      {/* Bottom Navigation Bar (Mobile Only) */}
+      <div className="fixed bottom-0 left-0 right-0 z-50 md:hidden bg-black/90 backdrop-blur-xl border-t border-white/10 py-2 px-4">
+        <div className="flex justify-around items-center">
+          {bottomNavItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.name}
+                onClick={() => handleBottomNavClick(item)}
+                className="flex flex-col items-center gap-1 text-gray-400 hover:text-gold transition py-1 px-3 rounded-lg"
+              >
+                <Icon size={20} />
+                <span className="text-[10px]">{t(`nav.${item.name.toLowerCase()}`)}</span>
+              </button>
+            );
+          })}
+          {/* Cart Button in Bottom Nav */}
+          <button
+            onClick={() => setCartOpen(true)}
+            className="flex flex-col items-center gap-1 text-gray-400 hover:text-gold transition py-1 px-3 rounded-lg relative"
+          >
+            <FiShoppingCart size={20} />
+            <span className="text-[10px]">{t("nav.cart")}</span>
+            {itemCount > 0 && (
+              <span className="absolute -top-1 -right-1 bg-gold text-black text-[10px] rounded-full w-4 h-4 flex items-center justify-center font-bold">
+                {itemCount > 9 ? "9+" : itemCount}
+              </span>
+            )}
+          </button>
+          {/* User/Login Button in Bottom Nav */}
+          {user ? (
+            <button
+              onClick={() => {
+                // You can navigate to dashboard or open user menu
+                navigate("/dashboard");
+              }}
+              className="flex flex-col items-center gap-1 text-gray-400 hover:text-gold transition py-1 px-3 rounded-lg"
+            >
+              {user.picture ? (
+                <img
+                  src={user.picture}
+                  alt={user.name}
+                  className="w-5 h-5 rounded-full object-cover"
+                />
+              ) : (
+                <FiUser size={20} />
+              )}
+              <span className="text-[10px]">{t("nav.account")}</span>
+            </button>
+          ) : (
+            <Link
+              to="/login"
+              className="flex flex-col items-center gap-1 text-gray-400 hover:text-gold transition py-1 px-3 rounded-lg"
+            >
+              <FiUser size={20} />
+              <span className="text-[10px]">{t("nav.login")}</span>
+            </Link>
+          )}
+        </div>
+      </div>
+
       <CartDrawer isOpen={cartOpen} onClose={() => setCartOpen(false)} />
-      <ReservationModal isOpen={reserveOpen} onClose={() => setReserveOpen(false)} />
+      <ReservationModal
+        isOpen={reserveOpen}
+        onClose={() => setReserveOpen(false)}
+      />
+
+      {/* Add padding to bottom of page content to prevent overlap with bottom nav */}
+      <style>{`
+        @media (max-width: 768px) {
+          body {
+            padding-bottom: 65px;
+          }
+        }
+      `}</style>
     </>
   );
 };

@@ -40,7 +40,8 @@ export const AuthProvider = ({ children }) => {
       email: res.data.user.email,
       role: res.data.user.role,
       preferred_currency: res.data.user.preferred_currency || 'ETB',
-      preferred_language: res.data.user.preferred_language || 'en'
+      preferred_language: res.data.user.preferred_language || 'en',
+      picture: null
     });
     return res.data;
   };
@@ -55,10 +56,12 @@ export const AuthProvider = ({ children }) => {
       email: res.data.user.email,
       role: res.data.user.role,
       preferred_currency: res.data.user.preferred_currency || 'ETB',
-      preferred_language: res.data.user.preferred_language || 'en'
+      preferred_language: res.data.user.preferred_language || 'en',
+     picture: null
     });
     return res.data;
   };
+
 
 const getMe = async () => {
   try {
@@ -77,6 +80,24 @@ const getMe = async () => {
     setUser(null);
   };
 
+  // src/context/AuthContext.jsx (add this method)
+const googleLogin = async (idToken) => {
+  const res = await authAPI.googleLogin({ credential: idToken });
+  localStorage.setItem('token', res.data.token);
+  setToken(res.data.token);
+  setUser({
+    id: res.data.user.id,
+    name: res.data.user.name,
+    email: res.data.user.email,
+    role: res.data.user.role,
+    preferred_currency: res.data.user.preferred_currency || 'ETB',
+    preferred_language: res.data.user.preferred_language || 'en',
+    picture: res.data.user.picture || null
+  });
+  return res.data;
+};
+
+
   return (
   <AuthContext.Provider value={{ 
     user, 
@@ -86,6 +107,7 @@ const getMe = async () => {
     register, 
     logout, 
     updateUser,
+    googleLogin,    // ← Export the new Google login method
     getMe,
     isAdmin: user?.role === 'admin' || user?.role === 'manager' 
   }}>

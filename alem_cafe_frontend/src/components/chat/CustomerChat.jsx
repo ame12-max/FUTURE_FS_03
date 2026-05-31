@@ -59,7 +59,7 @@ const CustomerChat = () => {
       <div className="flex items-center justify-center h-full text-gray-400">
         <div className="text-center">
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold mx-auto mb-3"></div>
-          <p className="text-sm">{t('Connecting...')}</p>
+          <p className="text-sm">{t('chat.Connecting')}</p>
         </div>
       </div>
     );
@@ -99,7 +99,7 @@ const CustomerChat = () => {
         <div ref={messagesEndRef} />
       </div>
       
-      <div className="p-16 border-t border-white/10">
+      <div className=" border-t border-white/10">
         <div className="flex gap-2">
           <input
             ref={inputRef}

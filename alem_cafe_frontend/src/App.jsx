@@ -24,6 +24,8 @@ import OrderManagement from './pages/Admin/OrderManagement';
 import Favorites from './pages/Favorites';
 import AccountManagement from './pages/AccountManagement';
 import ReservationManagement from './pages/Admin/ReservationManagement';
+import OAuthRedirect from './pages/OAuthRedirect';
+
 
 function App() {
   return (
@@ -58,6 +60,7 @@ function App() {
                     <Route path="/cart" element={<Cart />} />
                     <Route path="/favorites" element={<Favorites />} />
                     <Route path="*" element={<Home />} />
+                    <Route path="/oauth-redirect" element={<OAuthRedirect />} />
                   </Routes>
                   <Footer />
                   <ChatWidget />

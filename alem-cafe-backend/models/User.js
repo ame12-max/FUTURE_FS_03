@@ -3,9 +3,9 @@ const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 
 const User = {
-  findByEmail: async (email) => {
+ findByEmail: async (email) => {
     const [rows] = await db.query(
-      'SELECT id, name, email, password, role, preferred_currency, preferred_language, created_at FROM users WHERE email = ?',
+      'SELECT id, name, email, password, role, picture, preferred_currency, preferred_language, created_at FROM users WHERE email = ?',
       [email]
     );
     return rows[0];
@@ -13,19 +13,28 @@ const User = {
   
   findById: async (id) => {
     const [rows] = await db.query(
-      'SELECT id, name, email, role, preferred_currency, preferred_language, created_at FROM users WHERE id = ?',
+      'SELECT id, name, email, role, picture, preferred_currency, preferred_language, created_at FROM users WHERE id = ?',
       [id]
     );
     return rows[0];
   },
   
-  create: async (name, email, password, role = 'user') => {
+  create: async (name, email, password, role = 'user', picture = null) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const [result] = await db.query(
-      'INSERT INTO users (name, email, password, role) VALUES (?, ?, ?, ?)',
-      [name, email, hashedPassword, role]
+      'INSERT INTO users (name, email, password, role, picture) VALUES (?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, role, picture]
     );
     return result.insertId;
+  },
+  
+  updatePicture: async (id, picture) => {
+    if (!picture) return;
+    const [result] = await db.query(
+      'UPDATE users SET picture = ? WHERE id = ?',
+      [picture, id]
+    );
+    return result.affectedRows;
   },
   
   updateProfile: async (id, { name, email, phone, preferred_currency, preferred_language }) => {
